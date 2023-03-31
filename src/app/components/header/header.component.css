@@ -1,0 +1,82 @@
+.header-container {
+    color: #f0ffff;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    height: 70px;
+    background: linear-gradient(to left top, #1D1D1D, #1D1D1DF2, #1D1D1DDE);
+}
+.img-container {
+    background-image: url("../../../assets/Logo.png");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 200px;
+    height: 100%;
+}
+form {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(#323232, #232323);
+}
+.search-bar {
+    font-size: 20px;
+    width: 400px;
+    height: 60%;
+    padding-left: 15px;
+    padding-right: 50px;
+    border-radius: 100px;
+    border: none;
+    outline: none;
+}
+::placeholder {
+    color: #000923;
+    opacity: 1;
+}
+::-ms-input-placeholder {
+    color: #000923;
+}
+.search-btn {
+    background: radial-gradient(#ffee93, #eab941);
+    border-radius: 100px;
+    border: none;
+    position: relative;
+    right: 40px;
+    width: 40px;
+    height: 60%;
+}
+.magnifying-glass {
+    color: #000923;
+}
+.login-btn-container {
+    background: linear-gradient(#323232, #232323);
+    display: flex;
+}
+.login-btn {
+    margin: 15px;
+    border: none;
+    background: radial-gradient(#ffee93, #eab941);
+    width: 40px;
+    border-radius: 50%;
+    min-width: 40px;
+}
+.login-btn:hover {
+    background: #000923;
+    color: #fff;
+}
+.nav {
+    display: flex;
+    height: fit-content;
+    list-style: none;
+    background: #000923;
+    padding: 5px;
+}
+li {
+    font-size: 20px;
+    border: 2px solid #f0ffff;
+    margin: 5px;
+    padding: 10px;
+    line-height: 1;
+    align-self: center;
+}

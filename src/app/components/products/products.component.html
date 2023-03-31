@@ -1,0 +1,29 @@
+<div class="title">
+    <h1>PRODUCTOS</h1>
+</div>
+<div class="category">
+    <h2 id="categorias-text">CATEGORÍAS</h2>
+    <ul *ngFor="let categoria of categorias">
+        <li (click)="filtrarRopaPorCategoria(categoria.id!)">{{categoria.nombre}}</li>
+    </ul>
+    <h2 id="filtros-text">FILTROS</h2>
+    <h4 id="color-text">COLOR</h4>
+    <ul id="colores" *ngFor="let color of colores" (click)="filtrarRopaPorColor(color.id!)">
+        <div class="color-swatch" [style.background-color]="color.hexadecimal"></div>
+        <li>{{color.nombre}}</li>
+    </ul>
+</div>
+<div class="products-container">
+    <ng-container *ngFor="let product of products">
+    <div class="products">
+        <div class="product-img">
+            <img src="{{product.imagen}}" width="200px">
+        </div>
+        <div class="product-details">
+            <h3>{{product.nombre}}</h3>
+            <h4>{{product.descripcion}}</h4>
+            <h4>{{product.precio}}</h4>
+        </div>
+    </div>
+    </ng-container>
+</div>

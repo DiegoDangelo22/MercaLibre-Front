@@ -1,0 +1,27 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    align-self: center;
+    font-size: 28px;
+}
+form {
+    display: flex;
+    flex-direction: column;
+    width: 60vw;
+    height: 424px;
+}
+input {
+    padding: 10px;
+    margin:  20px 0;
+    font-size: 16px;
+}
+.submit {
+    margin-top: 20px;
+    width: 30%;
+    align-self: center;
+}
+.login-errs {
+    text-align: center;
+}

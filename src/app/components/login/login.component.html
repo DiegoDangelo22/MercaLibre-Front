@@ -1,0 +1,12 @@
+<div class="container">
+<form [formGroup]="formLogin" (ngSubmit)="onLogin()" novalidate>
+    <label for="nombreUsuario">Nombre de usuario</label>
+    <input formControlName="nombreUsuario" id="nombreUsuario" type="text" required>
+    <label for="password">Contraseña</label>
+    <input formControlName="password" id="password" type="password" required>
+    <input class="submit" type="submit" value="Iniciar sesión">
+    <div class="login-errs">
+        <p>{{errMsj}}</p>
+    </div>
+</form>
+</div>

@@ -1,0 +1,10 @@
+<h1>Resultados de la búsqueda:</h1>
+
+<div *ngIf="resultados.length === 0">No se encontraron resultados.</div>
+
+<div *ngFor="let ropa of resultados">
+<h2>{{ropa.nombre}}</h2>
+<p>{{ropa.descripcion}}</p>
+<p>{{ropa.color}}</p>
+<p>{{ropa.precio}}</p>
+</div>

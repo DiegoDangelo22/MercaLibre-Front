@@ -1,0 +1,23 @@
+<div class="header-container">
+    <div class="header">
+        <div class="img-container"></div>
+        <div class="header">
+            
+                <form (ngSubmit)="buscar()">
+                    <input type="text" class="search-bar" placeholder="Buscar productos" name="terminoBusqueda" [(ngModel)]="terminoBusqueda">
+                    <button type="submit" class="search-btn"><i class="fa-solid fa-magnifying-glass magnifying-glass"></i></button>
+                </form>
+                <div class="login-btn-container">
+                    <button routerLink="/login" class="login-btn"><i class="fa-solid fa-right-to-bracket"></i></button>
+
+                </div>
+        </div>
+    </div>
+<nav>
+    <ul class="nav">
+        <li routerLink="/products">PRODUCTOS</li>
+        <li routerLink="/contact">CONTACTO</li>
+        <li routerLink="/administration">ADMINISTRAR</li>
+    </ul>
+</nav>
+</div>
