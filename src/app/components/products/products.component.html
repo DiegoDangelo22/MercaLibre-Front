@@ -15,7 +15,7 @@
 </div>
 <div class="products-container">
     <ng-container *ngFor="let product of products">
-    <div class="products">
+    <div class="products" routerLink="/details/{{product.id}}">
         <div class="product-img">
             <img src="{{product.imagen}}" width="200px">
         </div>

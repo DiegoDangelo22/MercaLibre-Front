@@ -1,0 +1,21 @@
+.img {
+    background: pink;
+    float: left;
+    height: fit-content;
+}
+.details {
+    margin: 0 0 20px 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 20px;
+}
+.price > h2 {
+    font-weight: 400;
+}
+.color-swatch {
+    display: flex;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+}

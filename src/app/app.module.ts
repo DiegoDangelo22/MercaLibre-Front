@@ -13,6 +13,7 @@ import { ContactComponent } from './components/contact/contact.component';
 import { environment } from '../environments/environment';
 import { SearchResultsComponent } from './components/search-results/search-results.component';
 import { AdminComponent } from './components/admin/admin.component';
+import { ProductDetailsComponent } from './components/product-details/product-details.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { AdminComponent } from './components/admin/admin.component';
     ProductsComponent,
     ContactComponent,
     SearchResultsComponent,
-    AdminComponent
+    AdminComponent,
+    ProductDetailsComponent
   ],
   imports: [
     BrowserModule,
