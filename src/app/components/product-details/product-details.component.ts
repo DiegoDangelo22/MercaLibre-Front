@@ -26,16 +26,18 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   zoomer(): void {
-    const imageContainer:any = document.querySelector(".img");
+    const imageContainer: any = document.querySelector(".img");
     const image = imageContainer.querySelector("img");
-    
-    // Mantén el valor actual de la escala en una variable
-    let currentScale = 1;
   
-    imageContainer.addEventListener("mousemove", (e:any) => {
+    // Mantén el valor actual de la escala en una variable
+    let currentScale = 1.5;
+    let x = 0;
+    let y = 0;
+  
+    imageContainer.addEventListener("mousemove", (e: any) => {
       // Calcula la posición del mouse dentro del contenedor de la imagen
-      const x = e.clientX - imageContainer.offsetLeft;
-      const y = e.clientY - imageContainer.offsetTop;
+      x = e.clientX - imageContainer.offsetLeft;
+      y = e.clientY - imageContainer.offsetTop;
   
       // Aplica la transformación CSS en la imagen para hacer zoom y moverla
       image.style.transform = `translate(-${x * (currentScale - 1)}px, -${y * (currentScale - 1)}px) scale(${currentScale})`;
@@ -46,34 +48,28 @@ export class ProductDetailsComponent implements OnInit {
       image.style.transform = "translate(0, 0) scale(1)";
     });
   
-    const maxScale = Math.max(image.naturalWidth / imageContainer.clientWidth, image.naturalHeight / imageContainer.clientHeight);
+    const maxScale = Math.max(
+      image.naturalWidth / imageContainer.clientWidth,
+      image.naturalHeight / imageContainer.clientHeight
+    );
   
     function zoomIn() {
       currentScale += 0.1;
       if (currentScale > maxScale) currentScale = maxScale;
-      image.style.transform = `scale(${currentScale})`;
-      image.updateTransform();
+      updateTransform(x, y, currentScale);
     }
-    
+  
     function zoomOut() {
       currentScale -= 0.1;
       if (currentScale < 1) currentScale = 1;
-      image.style.transform = `scale(${currentScale})`;
-      image.updateTransform();
+      updateTransform(x, y, currentScale);
     }
-    
-  
-    let lastScrollPosition = 0;
   
     function handleScroll(event: WheelEvent) {
-      const currentScrollPosition = event.deltaY > 0 ? 1 : -1;
-      if (currentScrollPosition !== lastScrollPosition) {
-        if (currentScrollPosition > 0) {
-          zoomOut();
-        } else {
-          zoomIn();
-        }
-        lastScrollPosition = currentScrollPosition;
+      if (event.deltaY > 0) {
+        zoomOut();
+      } else {
+        zoomIn();
       }
     }
 
@@ -81,9 +77,7 @@ export class ProductDetailsComponent implements OnInit {
       const transform = `translate(-${x * (scale - 1)}px, -${y * (scale - 1)}px) scale(${scale})`;
       image.style.transform = transform;
     }
-    
-  
-    document.addEventListener('wheel', handleScroll);
+
+    imageContainer.addEventListener("wheel", handleScroll);
   }
-  
 }
