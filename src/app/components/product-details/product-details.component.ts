@@ -26,7 +26,7 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   zoomer(): void {
-    const imageContainer: any = document.querySelector(".img");
+    const imageContainer: any = document.querySelector(".img_container");
     const image = imageContainer.querySelector("img");
   
     // Mantén el valor actual de la escala en una variable

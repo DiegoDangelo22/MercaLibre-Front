@@ -1,23 +1,25 @@
-<div *ngIf="products" class="img">
-    <img src="{{products.imagen}}" width="450px">
-</div>
-<div *ngIf="products" class="details">
-    <h1>{{products.nombre}}</h1>
-    <div class="price">
-        <h2>${{products.precio}}</h2>
+<div class="container">
+    <div *ngIf="products" class="img_container">
+        <img src="{{products.imagen}}" width="450px">
     </div>
-    <div>
-        <span>Color: </span>
-        <span>{{products.color.nombre}}</span>
-        <div class="color-swatch" [style.background-color]="products.color.hexadecimal"></div>
-    </div>
-    <div>
-        <div>
-            <button>Agregar al carrito</button>
+    <div *ngIf="products" class="details">
+        <h1>{{products.nombre}}</h1>
+        <div class="price">
+            <h2>${{products.precio}}</h2>
+        </div>
+        <div class="color-container">
+            <span>Color: </span>
+            <span>{{products.color.nombre}}</span>
+            <div class="color-swatch" [style.background-color]="products.color.hexadecimal"></div>
         </div>
         <div>
-            <button>Agregar todas las variantes al carrito</button>
-            <button>Borrar todas las variantes del carrito</button>
+            <div>
+                <button>Agregar al carrito</button>
+            </div>
+            <div>
+                <button>Agregar todas las variantes al carrito</button>
+                <button>Borrar todas las variantes del carrito</button>
+            </div>
         </div>
     </div>
 </div>
