@@ -1,15 +1,15 @@
 <div class="container">
-    <div *ngIf="products" class="img_container">
-        <img src="{{products.imagen}}" width="450px">
+    <div class="img_container" *ngFor="let imagen of imagenes">
+        <img src="{{imagen.nombre}}" width="450px" (load)="zoomer()">
     </div>
-    <div *ngIf="products" class="details">
+    <div class="details" *ngIf="products">
         <h1>{{products.nombre}}</h1>
         <div class="price">
             <h2>${{products.precio}}</h2>
         </div>
         <div class="color-container">
             <span>Color: </span>
-            <span *ngIf="colores">{{colores[0].nombre}}</span>
+            <span *ngIf="colores"></span>
             <ng-container *ngFor="let color of colores">
                 <div class="color-swatch" [style.background-color]="color.hexadecimal"></div>
             </ng-container>

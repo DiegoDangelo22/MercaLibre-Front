@@ -15,7 +15,7 @@ export class RopaService {
   public buscarRopa(termino: string): Observable<Ropa[]> {
     const url = `${this.URL}buscar?termino=${termino}`;
     return this.httpClient.get<Ropa[]>(url);
-  }  
+  }
 
   public buscarRopas(query: any) {
     return this.httpClient.post(`${this.URL}buscar`, { params: query });

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Color } from 'src/app/model/color';
+import { ImagenColor } from 'src/app/model/imagen-color';
 import { Ropa } from 'src/app/model/ropa';
+import { ImagenColorService } from 'src/app/services/imagen-color.service';
 import { RopaService } from 'src/app/services/ropa.service';
 
 @Component({
@@ -10,23 +12,29 @@ import { RopaService } from 'src/app/services/ropa.service';
   styleUrls: ['./product-details.component.css']
 })
 export class ProductDetailsComponent implements OnInit {
-  products: Ropa|null = null;
-  colores: Color[] = [];
+  products: any
+  colores: any[] = [];
+  imagenes: any[] = [];
 
-  constructor(private ropaService: RopaService, private activatedRoute: ActivatedRoute) {}
+  constructor(private ropaService: RopaService, private imagenColorService: ImagenColorService, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
     const id = this.activatedRoute.snapshot.params['id'];
     this.ropaService.detail(id).subscribe(data => {
-      console.log(data)
-      this.colores = data.colores;
+      let ropaId:any = data.id;
       this.products = data;
+      this.imagenColorService.lista(ropaId).subscribe(data => {
+        let datas:any = data;
+        for (let i = 0; i < datas.length; i++) {
+          this.imagenes.push(datas[i]);
+          this.colores.push(datas[i].color)
+        }
+      }, err => {
+        alert(err.message);
+      })
     }, err => {
       alert(err.message);
-    })
-    setTimeout(() => {
-      this.zoomer();
-    }, 2000);
+    });
   }
 
   zoomer(): void {
