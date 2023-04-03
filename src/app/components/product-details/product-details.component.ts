@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Color } from 'src/app/model/color';
 import { Ropa } from 'src/app/model/ropa';
 import { RopaService } from 'src/app/services/ropa.service';
 
@@ -10,12 +11,15 @@ import { RopaService } from 'src/app/services/ropa.service';
 })
 export class ProductDetailsComponent implements OnInit {
   products: Ropa|null = null;
+  colores: Color[] = [];
 
   constructor(private ropaService: RopaService, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
     const id = this.activatedRoute.snapshot.params['id'];
     this.ropaService.detail(id).subscribe(data => {
+      console.log(data)
+      this.colores = data.colores;
       this.products = data;
     }, err => {
       alert(err.message);

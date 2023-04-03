@@ -74,17 +74,17 @@ export class AdminComponent implements OnInit {
   createRopa(): void {
     this.imgServ.onUpload().then((url: string) => {
       this.imagen = url;
-      const product = new Ropa(this.nombre, this.descripcion, this.imagen, {id: this.colorSeleccionado} as Color, this.precio, {id: this.categoriaSeleccionada} as Categoria);
-      this.ropaService.save(product).subscribe(data => {
+      // const product = new Ropa(this.nombre, this.descripcion, this.imagen, {id: this.colorSeleccionado} as Color, this.precio, {id: this.categoriaSeleccionada} as Categoria);
+      // this.ropaService.save(product).subscribe(data => {
         console.log("Ropa guardada correctamente");
         let modal: any = document.querySelector(".modal-container");
         modal.style.display = "none";
       }, err => {
         alert(err.error.mensaje);
       });
-    }).catch((error) => {
-      console.error("Error al subir la imagen: ", error);
-    });
+    // }).catch((error) => {
+      // console.error("Error al subir la imagen: ", error);
+    // });
   }
 
   createColor(): void {

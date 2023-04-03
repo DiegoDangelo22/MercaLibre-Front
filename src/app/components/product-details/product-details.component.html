@@ -9,8 +9,10 @@
         </div>
         <div class="color-container">
             <span>Color: </span>
-            <span>{{products.color.nombre}}</span>
-            <div class="color-swatch" [style.background-color]="products.color.hexadecimal"></div>
+            <span *ngIf="colores">{{colores[0].nombre}}</span>
+            <ng-container *ngFor="let color of colores">
+                <div class="color-swatch" [style.background-color]="color.hexadecimal"></div>
+            </ng-container>
         </div>
         <div>
             <div>
