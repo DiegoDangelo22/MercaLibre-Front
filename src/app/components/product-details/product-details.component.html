@@ -22,6 +22,22 @@
                 <button>Agregar todas las variantes al carrito</button>
                 <button>Borrar todas las variantes del carrito</button>
             </div>
+
+            <form (ngSubmit)="agregarColor()">
+                <div>
+                  <label for="nombre">Nombre:</label>
+                  <input type="text" id="nombre" name="nombre" [(ngModel)]="color.nombre">
+                </div>
+                <div>
+                  <label for="hexadecimal">Hexadecimal:</label>
+                  <input type="text" id="hexadecimal" name="hexadecimal" [(ngModel)]="color.hexadecimal">
+                </div>
+                <div>
+                    <label for="color-imagen">Imagen del color</label>
+                    <input type="file" id="color-imagen" (change)="imageService.onFileSelected($event)" accept="image/*">
+                </div>
+                <button type="submit">Agregar color</button>
+              </form>
         </div>
     </div>
 </div>

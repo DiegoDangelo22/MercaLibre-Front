@@ -1,16 +1,33 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, catchError, tap, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Ropa } from '../model/ropa';
+import { Color } from '../model/color';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RopaService {
   URL = environment.URL + 'ropa/';
-
+  
   constructor(private httpClient: HttpClient) { }
+  
+
+  agregarColor(id: number, color: Color): Observable<any> {
+   const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    return this.httpClient.post<Ropa>(`${this.URL}${id}/colores`, color, httpOptions).pipe(
+      
+      catchError((error: any) => {
+        console.error(error);
+        return throwError("Error al agregar el color.");
+      })
+    );
+  }
 
   public buscarRopa(termino: string): Observable<Ropa[]> {
     const url = `${this.URL}buscar?termino=${termino}`;
@@ -34,6 +51,12 @@ export class RopaService {
   }
 
   public save(ropa: Ropa):Observable<any> {
+    // const httpOptions = {
+    //   headers: new HttpHeaders({
+    //     'Content-Type': 'application/json;charset=UTF-8'
+
+    //   })
+    // };
     return this.httpClient.post<any>(this.URL + 'create', ropa);
   }
 

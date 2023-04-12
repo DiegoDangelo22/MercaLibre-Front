@@ -11,7 +11,8 @@ import { ProductsComponent } from '../components/products/products.component';
 export class ImageService {
   URL: string = '';
   uploadPercent: any;
-  autoIncrement: any;
+  ropaAutoIncrement: any;
+  colorAutoIncrement: any;
   private file: any;
   private fileName: any;
 
@@ -19,9 +20,12 @@ export class ImageService {
 
   onFileSelected(event: any) {
     this.http.get(environment.URL + "ropa/autoincrement").subscribe(data => {
-      this.autoIncrement = data;
-      this.file = event.target.files[0];
-      this.fileName = `Ropa_${this.autoIncrement}`;
+      this.ropaAutoIncrement = data;
+      this.http.get(environment.URL + "color/autoincrement").subscribe(data => {
+        this.colorAutoIncrement = data;
+        this.file = event.target.files[0];
+        this.fileName = `Ropa_${this.ropaAutoIncrement}_${this.colorAutoIncrement}`;
+      })
     });
   }
 

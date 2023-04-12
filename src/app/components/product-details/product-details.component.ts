@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Color } from 'src/app/model/color';
 import { ImagenColor } from 'src/app/model/imagen-color';
 import { Ropa } from 'src/app/model/ropa';
+import { ImageService } from 'src/app/services/image.service';
 import { ImagenColorService } from 'src/app/services/imagen-color.service';
 import { RopaService } from 'src/app/services/ropa.service';
 
@@ -15,27 +17,74 @@ export class ProductDetailsComponent implements OnInit {
   products: any
   colores: any[] = [];
   imagenes: any[] = [];
-
-  constructor(private ropaService: RopaService, private imagenColorService: ImagenColorService, private activatedRoute: ActivatedRoute) {}
+  colorForm!: FormGroup;
+  nombre: any;
+  hexadecimal: any;
+  color: any = {};
+  constructor(private ropaService: RopaService, private imagenColorService: ImagenColorService, private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder, public imageService: ImageService) {}
 
   ngOnInit(): void {
+    this.colorForm = this.formBuilder.group({
+      nombre: ['', Validators.required],
+      hexadecimal: ['', Validators.required],
+      imagen: ['', Validators.required]
+    });
+    
+
+
     const id = this.activatedRoute.snapshot.params['id'];
     this.ropaService.detail(id).subscribe(data => {
       let ropaId:any = data.id;
       this.products = data;
-      this.imagenColorService.lista(ropaId).subscribe(data => {
         let datas:any = data;
-        for (let i = 0; i < datas.length; i++) {
-          this.imagenes.push(datas[i]);
-          this.colores.push(datas[i].color)
-        }
-      }, err => {
-        alert(err.message);
-      })
+   
+         
+          let colores = datas.colores;
+          // let imagenesColor = datas.colores.imagenesColor;
+          for (let i = 0; i < colores.length; i++) {
+            this.colores = colores;
+            this.imagenes = colores[i].imagenesColor;
+          }
+        
+
+        console.log(this.imagenes)
     }, err => {
       alert(err.message);
     });
   }
+
+  agregarColor() {
+  
+      const id = this.activatedRoute.snapshot.params['id'];
+      // const color = this.colorForm.value;
+  
+    
+        // Subir imagen y crear objeto ImagenColor
+        this.imageService.onUpload().then((url: string) => {
+          const imagenColor = new ImagenColor(url, this.color, {id: id} as Ropa);
+          let imagenColorArray:ImagenColor[]=[]
+          imagenColor.nombre = url;
+          imagenColorArray.push(imagenColor);
+  
+          // Crear objeto Color y agregar imagen
+          const colorConImagen = new Color(this.color.nombre, this.color.hexadecimal, imagenColorArray);
+          // colorConImagen.nombre = this.color.nombre;
+          // colorConImagen.hexadecimal = this.color.hexadecimal;
+          // colorConImagen.imagenesColor.push(imagenColorArray);
+  
+          // Agregar color a la ropa
+          this.ropaService.agregarColor(id, colorConImagen).subscribe((response:any) => {
+            const ropa = response as Ropa;
+            // ropa.colores.push(colorConImagen);
+            
+            // this.selectedFile = null;
+            console.log(ropa)
+            console.log("La ropa se guardó correctamente");
+          });
+        });
+    }
+  
+  
 
   zoomer(): void {
     const imageContainer: any = document.querySelector(".img_container");
