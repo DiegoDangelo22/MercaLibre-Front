@@ -74,9 +74,13 @@ form {
 }
 li {
     font-size: 20px;
-    border: 2px solid #f0ffff;
     margin: 5px;
     padding: 10px;
     line-height: 1;
     align-self: center;
+    background: radial-gradient(#ffee93, #eab941);
+    color: #000;
+    font-weight: bold;
+    letter-spacing: 2px;
+    border-radius: 10px;
 }

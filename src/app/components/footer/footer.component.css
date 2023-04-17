@@ -1,0 +1,14 @@
+.container {
+    height: 30vh;
+    background: #000923;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 100px;
+}
+.copyright {
+    display: flex;
+    gap: 10px;
+}

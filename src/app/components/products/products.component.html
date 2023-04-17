@@ -1,8 +1,24 @@
+<app-header></app-header>
+<body>
+<div class="container">
+  <div class="subcontainer">
+      <div class="add-product">
+          <button class="btn123" #addProductBtn>Agregar producto</button>
+      </div>
+      <div class="add-categoria">
+          <button class="btn123" #addCategoriaBtn>Agregar categoría</button>
+      </div>
+      <div class="add-color">
+          <button class="btn123" #addColorBtn>Agregar color</button>
+      </div>
+  </div>
+</div>
 <div class="title">
     <h1>PRODUCTOS</h1>
 </div>
+<div>
 <div class="category">
-    <h2 id="categorias-text">CATEGORÍAS</h2>
+    <h2 id="categorias-text">CATEGORIAS</h2>
     <ul *ngFor="let categoria of categorias">
         <li (click)="filtrarRopaPorCategoria(categoria.id!)">{{categoria.nombre}}</li>
     </ul>
@@ -10,20 +26,92 @@
     <h4 id="color-text">COLOR</h4>
     <ul id="colores" *ngFor="let color of colores" (click)="filtrarRopaPorColor(color.id!)">
         <div class="color-swatch" [style.background-color]="color.hexadecimal"></div>
-        <li>{{color.nombre}}</li>
+        <li class="color-text">{{color.nombre}}</li>
     </ul>
 </div>
 <div class="products-container">
-    <ng-container *ngFor="let product of products">
-    <div class="products" routerLink="/details/{{product.id}}">
-        <div class="product-img">
-            <img src="{{product.colores[0].imagenesColor[0].nombre}}" width="200px">
-        </div>
-        <div class="product-details">
-            <h3>{{product.nombre}}</h3>
-            <h4>{{product.descripcion}}</h4>
-            <h4>{{product.precio}}</h4>
-        </div>
-    </div>
-    </ng-container>
+      <div class="products" *ngFor="let product of products">
+            <div class="product-img" routerLink="/details/{{product.id}}">
+                <img [src]="getImagenRopaNombre(products, product.id!)" width="200px">
+            </div>
+            <div class="product-details" routerLink="/details/{{product.id}}">
+                <h3>{{product.nombre}}</h3>
+                <h4>{{product.descripcion}}</h4>
+                <h4>${{product.precio}}</h4>
+            </div>
+            <div class="crud-btn" *ngIf="isAdmin">
+                <button (click)="delete(product.id!)">Eliminar</button>
+            </div>
+      </div>
+  </div>
 </div>
+  <!-- MODALES -->
+  <div class="modal-container" id="create-product-modal">
+    <form class="modal" (ngSubmit)="createRopa()">
+        <div class="div-modal">
+            <label for="nombre">Nombre del producto</label>
+            <input type="text" id="nombre" name="nombre" [(ngModel)]="nombre">
+        </div>
+        <div class="div-modal">
+            <label for="descripcion">Descripción</label>
+            <input type="text" id="descripcion" name="descripcion" [(ngModel)]="descripcion">
+        </div>
+        <div class="div-modal">
+            <label for="categoria">Categoría</label>
+            <select id="categoria" name="categoriaSeleccionada" [(ngModel)]="categoriaSeleccionada">
+                <option *ngFor="let categoria of categorias" [value]="categoria.id">{{categoria.nombre}}</option>
+            </select>
+        </div>
+        <div class="div-modal">
+            <label for="color">Color</label>
+            <select id="color" name="colorSeleccionado" [(ngModel)]="colorSeleccionado">
+                <option *ngFor="let color of colores" [value]="color.id">{{color.nombre}}</option>
+            </select>
+        </div>
+        <div class="div-modal">
+            <label for="precio">Precio</label>
+            <input type="number" id="precio" name="precio" [(ngModel)]="precio">
+        </div>
+        <div class="div-modal">
+            <div class="subir-imagen">
+                <div>
+                    <h2>⬇⬇ Subir imagen ⬇⬇</h2>
+                </div>
+                <label id="imagen-label" for="imagen">
+                    <img src="../../../assets/upload-image.png" width="10%">
+                </label>
+            </div>
+            <input type="file" id="imagen" name="imagen" (change)="imgServ.onFileSelected($event)" accept="image/*">
+        </div>
+        <div class="div-modal">
+            <button class="modal-add-btn">Agregar producto</button>
+        </div>
+    </form>
+</div>
+<div class="modal-container" id="create-categoria-modal">
+    <form class="modal" (ngSubmit)="createCategoria()">
+        <div class="div-modal">
+            <label for="categoria-nombre">Nombre de la categoría</label>
+            <input type="text" id="categoria-nombre" name="categoriaNombre" [(ngModel)]="categoriaNombre">
+        </div>
+        <div class="div-modal">
+            <button class="modal-add-btn">Agregar categoría</button>
+        </div>
+    </form>
+</div>
+<div class="modal-container" id="create-color-modal">
+    <form class="modal" (ngSubmit)="createColor()">
+        <div class="div-modal">
+            <label for="color-nombre">Nombre del color</label>
+            <input type="text" id="color-nombre" name="colorNombre" [(ngModel)]="colorNombre">
+        </div>
+        <div class="div-modal">
+            <input type="color" class="color">
+        </div>
+        <div class="div-modal">
+            <button class="modal-add-btn">Agregar color</button>
+        </div>
+    </form>
+</div>
+</body>
+<app-footer></app-footer>

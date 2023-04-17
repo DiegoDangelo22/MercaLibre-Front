@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { JwtDto } from '../../model/security/jwt-dto';
 import { NuevoUsuario } from '../../model/security/nuevo-usuario';
 import { environment } from 'src/environments/environment';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { LoginUsuario } from '../../model/security/login-usuario';
 
 @Injectable({

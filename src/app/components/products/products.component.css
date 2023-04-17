@@ -1,3 +1,8 @@
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
 h1, h2, h3, h4 {
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -5,6 +10,7 @@ h1, h2, h3, h4 {
 .title {
     display: flex;
     justify-content: center;
+    margin-top: 30px;
 }
 .title::before {
     background: #eee;
@@ -13,20 +19,12 @@ h1, h2, h3, h4 {
     content: '';
     margin: auto 20px auto 20px;
 }
-.title::after{
+.title::after {
     background: #eee;
     flex-grow: 1;
     height: 1px;
     content: '';
     margin: auto 20px auto 20px;
-}
-.add-product {
-    display: flex;
-    justify-content: center;
-}
-.add-product > button {
-    font-size: 20px;
-    padding: 5px 10px;
 }
 .category {
     width: 20%;
@@ -34,9 +32,13 @@ h1, h2, h3, h4 {
     float: left;
     margin-top: 40px;
 }
+.category > h2 {
+    box-shadow: 10px 6px 20px 0px rgba(0,0,0,0.18);
+}
 .category > ul > li {
     letter-spacing: 2px;
     font-size: 18px;
+    margin-top: 10px;
 }
 #categorias-text {
     background: radial-gradient(#ffee93, #eab941);
@@ -50,10 +52,14 @@ h1, h2, h3, h4 {
     margin: 30px 0;
     font-weight: 800;
 }
+.color-text {
+    margin-top: 0 !important;
+}
 #colores {
     display: flex;
     justify-content: center;
-    margin-right: 80px;
+    align-items: center;
+    margin: 10px 80px 0 0;
 }
 #colores > li {
     list-style: none;
@@ -64,8 +70,8 @@ h1, h2, h3, h4 {
     display: flex;
     width: 20px;
     height: 20px;
-    border: 1px solid #ccc;
-    border-radius: 2px;
+    border: 1px solid #000;
+    border-radius: 50px;
 }
 .products-container {
     width: 80%;
@@ -73,6 +79,8 @@ h1, h2, h3, h4 {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    padding-left: 10px;
+    box-sizing: border-box;
 }
 .products {
     background: #f7f7f7;
@@ -80,6 +88,7 @@ h1, h2, h3, h4 {
     margin: 40px 0px 0px 40px;
     display: grid;
     align-self: end;
+    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.2);
 }
 .product-img {
     display: grid;
@@ -101,4 +110,96 @@ h1, h2, h3, h4 {
 .product-details > h4 {
     font-size: 16px;
     font-weight: 500;
+}
+.crud-btn {
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+/* BOTONES CRUD DE AQUI HACIA ABAJO*/
+.container {
+    display: flex;
+    height: 30px;
+    margin: 60px 0;
+}
+.subcontainer {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+.add-product, .add-categoria, .add-color {
+    display: flex;
+}
+.btn123 {
+    height: 150%;
+}
+button {
+    padding: 0 20px;
+    height: 100%;
+    font-size: 14px;
+    align-self: center;
+    background: radial-gradient(#ffee93, #eab941);
+    color: #000;
+    font-weight: 500;
+    letter-spacing: 2px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    border: none;
+    box-shadow: 10px 8px 20px 0px rgba(0,0,0,0.18);
+}
+.modal-container {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background: #000000c2;
+}
+.modal {
+    width: 80%;
+    margin: auto;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+.div-modal {
+    display: flex;
+    flex-direction: column;
+    background: #000;
+}
+label {
+    padding: 10px;
+    font-size: 18px;
+}
+input, select {
+    padding: 4px 10px;
+    margin: 0 10px;
+}
+.subir-imagen {
+    height: fit-content;
+    padding: 10px 10px 0 10px;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+}
+#imagen {
+    display: none;
+}
+#imagen-label {
+    padding: 0;
+}
+.modal-add-btn {
+    font-size: 16px;
+    padding: 10px;
+    display: flex;
+    align-self: flex-start;
+    margin: 10px 0 10px 10px;
+}
+.color {
+    margin: 10px 10px 0 10px;
+    border: 1px solid #fff;
+    padding: 0;
 }

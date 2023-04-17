@@ -1,0 +1,50 @@
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+h1, h2, h3, h4 {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.title {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+.title::before {
+    background: #eee;
+    flex-grow: 1;
+    height: 1px;
+    content: '';
+    margin: auto 20px auto 20px;
+}
+.title::after {
+    background: #eee;
+    flex-grow: 1;
+    height: 1px;
+    content: '';
+    margin: auto 20px auto 20px;
+}
+.container {
+    width: 50%;
+    height: 80vh;
+    padding: 50px;
+    box-sizing: border-box;
+}
+.contacto-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.contacto-list > li {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    font-size: 14px;
+}
+.fa-solid {
+    font-size: 30px;
+    width: 32px;
+}

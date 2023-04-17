@@ -1,8 +1,14 @@
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
 .container {
     width: 100%;
     height: 100vh;
     display: flex;
     justify-content: center;
+    margin-top: 30px;
 }
 .img_container {
     width: 450px;
@@ -24,16 +30,108 @@
     font-weight: 400;
     margin-bottom: 20px;
 }
-.color-swatch {
+.color-container {
+    padding: 20px 0;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
     display: flex;
+    align-items: center;
+}
+.color-swatch {
     width: 26px;
     height: 26px;
     border: 2px solid #000;
-    margin: 10px 0 20px 0;
     border-radius: 30px;
+    margin-left: 10px;
 }
-.color-container {
-    padding-top: 20px;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
+#add-image-color {
+    width: fit-content;
+    margin-top: 20px;
+}
+#add-image-color-btn {
+    width: 100%;
+    border: none;
+    background: radial-gradient(#ffee93, #eab941);
+    font-size: 18px;
+    padding: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+    border-radius: 10px;
+    box-shadow: 10px 8px 20px 0px rgba(0,0,0,0.18);
+}
+#add-color-form {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background: #000000c2;
+}
+.add-color-modal {
+    width: 80%;
+    margin: auto;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #000;
+}
+.div-modal {
+    display: flex;
+    flex-direction: column;
+    background: #000;
+}
+.label {
+    padding: 10px;
+    font-size: 18px;
+}
+.input {
+    margin: 0 10px 10px 10px;
+    padding: 4px 10px;
+}
+#hexadecimal {
+    border: 1px solid #fff;
+    padding: 0;
+}
+.subir-imagen {
+    height: fit-content;
+    padding: 10px;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+}
+#color-imagen {
+    display: none;
+}
+#add-color-btn-container {
+    display: flex;
+    flex-direction: column;
+    height: 40px;
+    padding: 10px;
+    background: #000;
+}
+#add-color-btn {
+    padding: 10px;
+    height: 100%;
+    font-size: 16px;
+    align-self: start;
+    background: radial-gradient(#ffee93, #eab941);
+    color: #000;
+    font-weight: 500;
+    letter-spacing: 2px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    border: none;
+    box-shadow: 10px 8px 20px 0px rgba(0,0,0,0.18);
+}
+.otras-imagenes {
+    display: flex;
+    width: 450px;
+    flex-wrap: wrap;
+    opacity: .6;
+    margin: 20px 0 0 20px;
+    gap: 10px;
 }

@@ -1,9 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, tap, throwError } from 'rxjs';
+import { Observable, catchError, map, tap, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Ropa } from '../model/ropa';
-import { Color } from '../model/color';
+import { ImagenColor } from '../model/imagen-color';
+import { ObjectMapper } from 'json-object-mapper';
 
 @Injectable({
   providedIn: 'root'
@@ -13,20 +14,8 @@ export class RopaService {
   
   constructor(private httpClient: HttpClient) { }
   
-
-  agregarColor(id: number, color: Color): Observable<any> {
-   const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
-    };
-    return this.httpClient.post<Ropa>(`${this.URL}${id}/colores`, color, httpOptions).pipe(
-      
-      catchError((error: any) => {
-        console.error(error);
-        return throwError("Error al agregar el color.");
-      })
-    );
+  agregarColor(id: number, imagenColor: ImagenColor): Observable<any> {
+    return this.httpClient.put(`${this.URL}${id}/imagen-color`, imagenColor);
   }
 
   public buscarRopa(termino: string): Observable<Ropa[]> {

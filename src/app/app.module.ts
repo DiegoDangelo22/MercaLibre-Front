@@ -12,8 +12,8 @@ import { ProductsComponent } from './components/products/products.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { environment } from '../environments/environment';
 import { SearchResultsComponent } from './components/search-results/search-results.component';
-import { AdminComponent } from './components/admin/admin.component';
 import { ProductDetailsComponent } from './components/product-details/product-details.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -23,8 +23,8 @@ import { ProductDetailsComponent } from './components/product-details/product-de
     ProductsComponent,
     ContactComponent,
     SearchResultsComponent,
-    AdminComponent,
-    ProductDetailsComponent
+    ProductDetailsComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,

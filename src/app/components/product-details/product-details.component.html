@@ -1,43 +1,69 @@
+<app-header></app-header>
+<body>
 <div class="container">
-    <div class="img_container" *ngFor="let imagen of imagenes">
-        <img src="{{imagen.nombre}}" width="450px" (load)="zoomer()">
-    </div>
-    <div class="details" *ngIf="products">
-        <h1>{{products.nombre}}</h1>
-        <div class="price">
-            <h2>${{products.precio}}</h2>
+    <div>
+        <div class="img_container">
+            <img [src]="imagenPorDefecto.nombre" width="450px" (load)="zoomer()">
         </div>
+        <div class="otras-imagenes">
+            <ng-container *ngFor="let imagen of imagenes">
+                <img [src]="imagen.nombre" width="100px" (click)="filtrarRopaPorColor(imagen.color)">
+            </ng-container>
+        </div>
+    </div>
+    <div class="details">
+        <ng-container *ngIf="products">
+            <h1>{{products.nombre}}</h1>
+            <div class="price">
+                <h2>${{products.precio}}</h2>
+            </div>
+        </ng-container>
         <div class="color-container">
             <span>Color: </span>
             <span *ngIf="colores"></span>
             <ng-container *ngFor="let color of colores">
-                <div class="color-swatch" [style.background-color]="color.hexadecimal"></div>
+                <div class="color-swatch" [style.background-color]="color.hexadecimal" (click)="filtrarRopaPorColor(color.id!)"></div>
             </ng-container>
         </div>
         <div>
-            <div>
-                <button>Agregar al carrito</button>
+            <div id="add-image-color" [hidden]="!isAdmin">
+                <button #addColorBtn id="add-image-color-btn">Agregar imagen y color</button>
             </div>
-            <div>
+            <!-- <div>
+                <button>Agregar al carrito</button>
+            </div> -->
+            <!-- <div>
                 <button>Agregar todas las variantes al carrito</button>
                 <button>Borrar todas las variantes del carrito</button>
+            </div> -->
+            <div id="add-color-form">
+                <form class="add-color-modal" (ngSubmit)="agregarColor()">
+                    <div class="div-modal">
+                        <label class="label" for="nombre">Color</label>
+                        <input type="text" class="input" id="nombre" name="nombre" [(ngModel)]="color.nombre">
+                    </div>
+                    <div class="div-modal">
+                        <label class="label" for="hexadecimal">Hexadecimal</label>
+                        <input type="color" class="input" id="hexadecimal" name="hexadecimal" [(ngModel)]="color.hexadecimal">
+                    </div>
+                    <div class="div-modal">
+                        <div class="subir-imagen">
+                            <div>
+                                <h2>⬇⬇ Subir imagen ⬇⬇</h2>
+                            </div>
+                            <label for="color-imagen">
+                                <img src="../../../assets/upload-image.png" width="10%">
+                            </label>
+                        </div>
+                        <input type="file" id="color-imagen" (change)="imageService.onFileSelected($event)" accept="image/*">
+                    </div>
+                    <div id="add-color-btn-container">
+                        <button type="submit" id="add-color-btn">Agregar color</button>
+                    </div>
+                </form>
             </div>
-
-            <form (ngSubmit)="agregarColor()">
-                <div>
-                  <label for="nombre">Nombre:</label>
-                  <input type="text" id="nombre" name="nombre" [(ngModel)]="color.nombre">
-                </div>
-                <div>
-                  <label for="hexadecimal">Hexadecimal:</label>
-                  <input type="text" id="hexadecimal" name="hexadecimal" [(ngModel)]="color.hexadecimal">
-                </div>
-                <div>
-                    <label for="color-imagen">Imagen del color</label>
-                    <input type="file" id="color-imagen" (change)="imageService.onFileSelected($event)" accept="image/*">
-                </div>
-                <button type="submit">Agregar color</button>
-              </form>
         </div>
     </div>
 </div>
+</body>
+<app-footer></app-footer>

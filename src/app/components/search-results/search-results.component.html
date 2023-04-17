@@ -1,10 +1,37 @@
-<h1>Resultados de la búsqueda:</h1>
-
-<div *ngIf="resultados.length === 0">No se encontraron resultados.</div>
-
-<div *ngFor="let ropa of resultados">
-<h2>{{ropa.nombre}}</h2>
-<p>{{ropa.descripcion}}</p>
-<p>{{ropa.colores}}</p>
-<p>{{ropa.precio}}</p>
+<app-header></app-header>
+<body>
+<div class="title">
+    <h1>Resultados</h1>
 </div>
+<div>
+<div class="category">
+    <h2 id="categorias-text">CATEGORIAS</h2>
+    <ul *ngFor="let categoria of categorias">
+        <li (click)="filtrarRopaPorCategoria(categoria.id!)">{{categoria.nombre}}</li>
+    </ul>
+    <h2 id="filtros-text">FILTROS</h2>
+    <h4 id="color-text">COLOR</h4>
+    <ul id="colores" *ngFor="let color of colores" (click)="filtrarRopaPorColor(color.id!)">
+        <div class="color-swatch" [style.background-color]="color.hexadecimal"></div>
+        <li class="color-text">{{color.nombre}}</li>
+    </ul>
+</div>
+<div class="products-container">
+    <div class="no-results" *ngIf="resultados.length === 0"><i class="fa-regular fa-face-sad-cry"></i>No se encontraron resultados.</div>
+    <div class="products" *ngFor="let product of resultados">
+          <div class="product-img" routerLink="/details/{{product.id}}">
+              <img [src]="product.imagenesColor[0].nombre" width="200px">
+          </div>
+          <div class="product-details" routerLink="/details/{{product.id}}">
+              <h3>{{product.nombre}}</h3>
+              <h4>{{product.descripcion}}</h4>
+              <h4>${{product.precio}}</h4>
+          </div>
+          <div class="crud-btn" *ngIf="isAdmin">
+              <button (click)="delete(product.id!)">Eliminar</button>
+          </div>
+    </div>
+</div>
+</div>
+</body>
+<app-footer></app-footer>

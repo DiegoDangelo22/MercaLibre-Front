@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginUsuario } from 'src/app/model/security/login-usuario';
@@ -36,7 +36,7 @@ export class LoginComponent {
         this.tokenService.setUserName(data.nombreUsuario);
         this.tokenService.setAuthorities(data.authorities);
         this.roles = data.authorities;
-        this.router.navigate(['/']);
+        this.router.navigate(['/products']);
       }, err =>{
         this.isLogged = false;
         this.isLogginFail = true;

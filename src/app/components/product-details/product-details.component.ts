@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ViewChild, ElementRef, AfterViewInit, Component, OnInit, AfterContentInit, ViewChildren, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Color } from 'src/app/model/color';
@@ -7,13 +7,14 @@ import { Ropa } from 'src/app/model/ropa';
 import { ImageService } from 'src/app/services/image.service';
 import { ImagenColorService } from 'src/app/services/imagen-color.service';
 import { RopaService } from 'src/app/services/ropa.service';
+import { TokenService } from 'src/app/services/security/token.service';
 
 @Component({
   selector: 'app-product-details',
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.css']
 })
-export class ProductDetailsComponent implements OnInit {
+export class ProductDetailsComponent implements OnInit, AfterViewInit {
   products: any
   colores: any[] = [];
   imagenes: any[] = [];
@@ -21,7 +22,12 @@ export class ProductDetailsComponent implements OnInit {
   nombre: any;
   hexadecimal: any;
   color: any = {};
-  constructor(private ropaService: RopaService, private imagenColorService: ImagenColorService, private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder, public imageService: ImageService) {}
+  imagenFiltrada: any[] = [];
+  imagenPorDefecto: any;
+  isLogged = false;
+  isAdmin = false;
+
+  constructor(private ropaService: RopaService, private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder, public imageService: ImageService, private tokenServ: TokenService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.colorForm = this.formBuilder.group({
@@ -29,62 +35,75 @@ export class ProductDetailsComponent implements OnInit {
       hexadecimal: ['', Validators.required],
       imagen: ['', Validators.required]
     });
-    
 
+    if(this.tokenServ.getToken()) {
+      this.isLogged = true;
+      this.isAdmin = true;
+    } else {
+      this.isLogged = false;
+      this.isAdmin = false;
+    }
 
     const id = this.activatedRoute.snapshot.params['id'];
     this.ropaService.detail(id).subscribe(data => {
-      let ropaId:any = data.id;
       this.products = data;
-        let datas:any = data;
-   
-         
-          let colores = datas.colores;
-          // let imagenesColor = datas.colores.imagenesColor;
-          for (let i = 0; i < colores.length; i++) {
-            this.colores = colores;
-            this.imagenes = colores[i].imagenesColor;
-          }
-        
-
-        console.log(this.imagenes)
+      this.colores = this.products.colores;
+      this.imagenes = this.products.imagenesColor;
+      this.imagenPorDefecto = this.imagenes.reduce((prev, current) => {
+        return (prev.id < current.id) ? prev : current;
+      });
     }, err => {
       alert(err.message);
     });
   }
 
-  agregarColor() {
-  
-      const id = this.activatedRoute.snapshot.params['id'];
-      // const color = this.colorForm.value;
-  
-    
-        // Subir imagen y crear objeto ImagenColor
-        this.imageService.onUpload().then((url: string) => {
-          const imagenColor = new ImagenColor(url, this.color, {id: id} as Ropa);
-          let imagenColorArray:ImagenColor[]=[]
-          imagenColor.nombre = url;
-          imagenColorArray.push(imagenColor);
-  
-          // Crear objeto Color y agregar imagen
-          const colorConImagen = new Color(this.color.nombre, this.color.hexadecimal, imagenColorArray);
-          // colorConImagen.nombre = this.color.nombre;
-          // colorConImagen.hexadecimal = this.color.hexadecimal;
-          // colorConImagen.imagenesColor.push(imagenColorArray);
-  
-          // Agregar color a la ropa
-          this.ropaService.agregarColor(id, colorConImagen).subscribe((response:any) => {
-            const ropa = response as Ropa;
-            // ropa.colores.push(colorConImagen);
-            
-            // this.selectedFile = null;
-            console.log(ropa)
-            console.log("La ropa se guardó correctamente");
-          });
+@ViewChild('addColorBtn', {static: true}) addColorBtn!: ElementRef;
+ngAfterViewInit(): void {
+    this.addColorBtn.nativeElement.addEventListener('click', () => {
+      const modal: any = document.querySelector('#add-color-form');
+      modal.style.display = 'flex';
+      window.onclick = (event: any) => {
+        if (event.target == modal) {
+          modal.style.display = 'none';
+        }
+      };
+    });
+}
+
+agregarColor() {
+  const id = this.activatedRoute.snapshot.params['id'];
+  this.imageService.onUpload().then((url: string) => {
+    this.ropaService.detail(id).subscribe(data => {
+      const color: Color = new Color(this.color.nombre, this.color.hexadecimal);
+      const imagenColor: ImagenColor = new ImagenColor(url, color as Color, {id: data.id} as unknown as Ropa);
+      this.ropaService.agregarColor(id, imagenColor).subscribe((response: any) => {
+          const res = response as Ropa;
+          location.reload();
+          console.log(res);
+          console.log("La ropa se guardó correctamente");
         });
-    }
+      });
+    });
+  };
   
-  
+  filtrarRopaPorColor(id: number) {
+    const ropaId = this.activatedRoute.snapshot.params['id'];
+    // this.ropaService.filtrarRopaPorColor(id).subscribe(ropas => {
+    //   for (let i = 0; i < ropas.length; i++) {
+    //     // ropas[i].imagenesColor.filter(imagen => imagen.color === id as any);
+    //     console.log(ropas)
+    //     this.imagenFiltrada = ropas[i].imagenesColor.filter(imagen => imagen.color === id as unknown as Color && imagen.ropa === ropaId as any)
+    //   }
+    //   // console.log(this.imagenFiltrada)
+    //   this.imagenPorDefecto = this.imagenFiltrada[0];
+    // });
+    this.ropaService.detail(ropaId).subscribe(data => {
+      for (let i = 0; i < data.imagenesColor.length; i++) {
+        this.imagenFiltrada = data.imagenesColor.filter(imagen => imagen.color === id as any)
+      }
+      this.imagenPorDefecto = this.imagenFiltrada[0];
+    })
+  }
 
   zoomer(): void {
     const imageContainer: any = document.querySelector(".img_container");
