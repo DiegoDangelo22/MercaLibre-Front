@@ -107,57 +107,46 @@ agregarColor() {
 
   zoomer(): void {
     const imageContainer: any = document.querySelector(".img_container");
-    const image = imageContainer.querySelector("img");
-  
-    // Mantén el valor actual de la escala en una variable
-    let currentScale = 1.5;
-    let x = 0;
-    let y = 0;
-  
-    imageContainer.addEventListener("mousemove", (e: any) => {
-      // Calcula la posición del mouse dentro del contenedor de la imagen
-      x = e.clientX - imageContainer.offsetLeft;
-      y = e.clientY - imageContainer.offsetTop;
-  
-      // Aplica la transformación CSS en la imagen para hacer zoom y moverla
-      image.style.transform = `translate(-${x * (currentScale - 1)}px, -${y * (currentScale - 1)}px) scale(${currentScale})`;
-    });
-  
-    imageContainer.addEventListener("mouseleave", () => {
-      // Reinicia la transformación CSS cuando el mouse sale del contenedor de la imagen
-      image.style.transform = "translate(0, 0) scale(1)";
-    });
-  
-    const maxScale = Math.max(
-      image.naturalWidth / imageContainer.clientWidth,
-      image.naturalHeight / imageContainer.clientHeight
-    );
-  
-    function zoomIn() {
-      currentScale += 0.1;
-      if (currentScale > maxScale) currentScale = maxScale;
-      updateTransform(x, y, currentScale);
-    }
-  
-    function zoomOut() {
-      currentScale -= 0.1;
-      if (currentScale < 1) currentScale = 1;
-      updateTransform(x, y, currentScale);
-    }
-  
-    function handleScroll(event: WheelEvent) {
-      if (event.deltaY > 0) {
-        zoomOut();
-      } else {
-        zoomIn();
+    const closeBtn: any = document.querySelector(".close-btn");
+    const fullscreenImageContainer: any = document.querySelector(".img_container_fs");
+    // const fsic: any = document.querySelector(".fs-img-container");
+
+    imageContainer.addEventListener('click', ()=> {
+      fullscreenImageContainer.style.display = "flex";
+      closeBtn.style.display = "flex";
+      window.onclick = function(event) {
+        if(event.target == fullscreenImageContainer) {
+          fullscreenImageContainer.style.display = "none";
+        }
       }
-    }
+    })
 
-    function updateTransform(x: number, y: number, scale: number) {
-      const transform = `translate(-${x * (scale - 1)}px, -${y * (scale - 1)}px) scale(${scale})`;
-      image.style.transform = transform;
-    }
+    closeBtn.addEventListener('click', ()=> {
+      fullscreenImageContainer.style.display = "none";
+      closeBtn.style.display = "none";
+    })
 
-    imageContainer.addEventListener("wheel", handleScroll);
-  }
-}
+  //   fsic.addEventListener("mousedown", (e: any) => {
+  //     if (e.button === 0) {
+  //         e.preventDefault();
+  //         const startX = e.clientX;
+  //         const startY = e.clientY;
+  //         const startScrollX = fsic.scrollLeft;
+  //         const startScrollY = fsic.scrollTop;
+  //         fsic.style.cursor = 'grabbing';
+  
+  //         fsic.addEventListener("mousemove", move);
+  //         fsic.addEventListener("mouseup", () => {
+  //             fsic.removeEventListener("mousemove", move);
+  //             fsic.style.cursor = 'grab';
+  //         });
+  
+  //         function move(e: any) {
+  //             const diffX = e.clientX - startX;
+  //             const diffY = e.clientY - startY;
+  //             fsic.scrollLeft = startScrollX - diffX;
+  //             fsic.scrollTop = startScrollY - diffY;
+  //         }
+  //     }
+  // })
+}}

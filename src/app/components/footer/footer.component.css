@@ -12,3 +12,12 @@
     display: flex;
     gap: 10px;
 }
+.diego {
+    background: #000;
+    display: inline-flex;
+    gap: 4px;
+    justify-content: center;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 700;
+}

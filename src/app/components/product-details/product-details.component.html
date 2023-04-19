@@ -3,11 +3,13 @@
 <div class="container">
     <div>
         <div class="img_container">
-            <img [src]="imagenPorDefecto.nombre" width="450px" (load)="zoomer()">
+            <img [src]="imagenPorDefecto.nombre" width="450px" (load)="zoomer()" draggable="false">
         </div>
         <div class="otras-imagenes">
             <ng-container *ngFor="let imagen of imagenes">
-                <img [src]="imagen.nombre" width="100px" (click)="filtrarRopaPorColor(imagen.color)">
+                <div class="other-images">
+                    <img [src]="imagen.nombre" width="100px" (click)="filtrarRopaPorColor(imagen.color)">
+                </div>
             </ng-container>
         </div>
     </div>
@@ -63,6 +65,14 @@
                 </form>
             </div>
         </div>
+    </div>
+</div>
+<div class="img_container_fs">
+    <div class="close-btn-container">
+        <button class="close-btn"><i class="fa-regular fa-circle-xmark fa-beat"></i>Cerrar</button>
+    </div>
+    <div class="fs-img-container">
+        <img [src]="imagenPorDefecto.nombre" id="fs-image" draggable="false">
     </div>
 </div>
 </body>

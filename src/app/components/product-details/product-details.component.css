@@ -5,7 +5,6 @@ body {
 }
 .container {
     width: 100%;
-    height: 100vh;
     display: flex;
     justify-content: center;
     margin-top: 30px;
@@ -13,8 +12,62 @@ body {
 .img_container {
     width: 450px;
     height: fit-content;
-    overflow: hidden;
     margin-left: 20px;
+    user-select: none;
+    cursor: zoom-in;
+}
+.img_container_fs {
+    display: none;
+    background: #000;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    z-index: 40;
+    flex-direction: column;
+    align-items: center;
+}
+.fs-img-container {
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px;
+    user-select: none;
+}
+#fs-image {
+    width: 100%;
+}
+.close-btn-container {
+    display: flex;
+    width: 100%;
+    height: 28.5vh;
+    z-index: 40;
+    position: relative;
+    background: #000;
+    margin: 20px 0;
+}
+.close-btn {
+    padding: 20px;
+    height: fit-content;
+    gap: 15px;
+    font-size: 14px;
+    align-self: center;
+    background: radial-gradient(#ffee93, #eab941);
+    color: #000;
+    font-weight: 500;
+    letter-spacing: 2px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    border: none;
+    box-shadow: 10px 8px 20px 0px rgba(0,0,0,0.18);
+    display: none;
+    flex-direction: column;
+    margin: auto;
+    cursor: pointer;
+}
+.close-btn > i {
+    font-size: 30px;
 }
 .details {
     text-transform: uppercase;
@@ -131,7 +184,14 @@ body {
     display: flex;
     width: 450px;
     flex-wrap: wrap;
-    opacity: .6;
     margin: 20px 0 0 20px;
     gap: 10px;
+}
+.other-images {
+    opacity: .6;
+    transition: 0.2s ease-in-out;
+}
+.other-images:hover {
+    opacity: 1;
+    cursor: pointer;
 }
