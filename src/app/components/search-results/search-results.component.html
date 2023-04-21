@@ -6,12 +6,12 @@
 <div>
 <div class="category">
     <h2 id="categorias-text">CATEGORIAS</h2>
-    <ul *ngFor="let categoria of categorias">
+    <ul *ngFor="let categoria of categorias" id="categorias" class="cursor">
         <li (click)="filtrarRopaPorCategoria(categoria.id!)">{{categoria.nombre}}</li>
     </ul>
     <h2 id="filtros-text">FILTROS</h2>
     <h4 id="color-text">COLOR</h4>
-    <ul id="colores" *ngFor="let color of colores" (click)="filtrarRopaPorColor(color.id!)">
+    <ul id="colores" *ngFor="let color of colores" (click)="filtrarRopaPorColor(color.id!)" class="cursor">
         <div class="color-swatch" [style.background-color]="color.hexadecimal"></div>
         <li class="color-text">{{color.nombre}}</li>
     </ul>
@@ -20,7 +20,8 @@
     <div class="no-results" *ngIf="resultados.length === 0"><i class="fa-regular fa-face-sad-cry"></i>No se encontraron resultados.</div>
     <div class="products" *ngFor="let product of resultados">
           <div class="product-img" routerLink="/details/{{product.id}}">
-              <img [src]="product.imagenesColor[0].nombre" width="200px">
+              <div class="layout"></div>
+              <img [src]="product.imagenesColor[0].nombre" width="150px">
           </div>
           <div class="product-details" routerLink="/details/{{product.id}}">
               <h3>{{product.nombre}}</h3>

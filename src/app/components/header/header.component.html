@@ -1,14 +1,16 @@
 <div class="header-container">
     <div class="header">
         <div class="img-container" routerLink="/products"></div>
-        <div class="header">
-                <form (ngSubmit)="buscar()">
-                    <input type="text" class="search-bar" placeholder="Buscar productos" name="terminoBusqueda" [(ngModel)]="terminoBusqueda">
-                    <button type="submit" class="search-btn"><i class="fa-solid fa-magnifying-glass magnifying-glass"></i></button>
-                </form>
-                <div class="login-btn-container">
-                    <button (click)="logOut()" *ngIf="isLogged" class="login-btn"><i class="fa-solid fa-right-to-bracket"></i></button>
-                    <button routerLink="/login" *ngIf="!isLogged" class="login-btn"><i class="fa-solid fa-right-to-bracket"></i></button>
+        <div class="header-options">
+                <div class="search-form">
+                    <form (ngSubmit)="buscar()">
+                        <input type="text" class="search-bar" placeholder="Buscar productos" name="terminoBusqueda" [(ngModel)]="terminoBusqueda">
+                        <button type="submit" class="search-btn"><i class="fa-solid fa-magnifying-glass magnifying-glass"></i></button>
+                    </form>
+                    <div class="login-btn-container">
+                        <button (click)="logOut()" *ngIf="isLogged" class="login-btn"><i class="fa-solid fa-right-to-bracket"></i></button>
+                        <button routerLink="/login" *ngIf="!isLogged" class="login-btn"><i class="fa-solid fa-right-to-bracket"></i></button>
+                    </div>
                 </div>
         </div>
     </div>

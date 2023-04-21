@@ -21,3 +21,17 @@
     text-decoration: none;
     font-weight: 700;
 }
+
+@media screen and (max-width: 820px) {
+    .container {
+        gap: 20px;
+    }
+    .copyright {
+        width: 50%;
+        flex-wrap: wrap;
+        text-align: center;
+    }
+    .copyright > i {
+        margin: 0 auto;
+    }
+}

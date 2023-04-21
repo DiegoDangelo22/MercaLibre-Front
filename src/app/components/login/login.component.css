@@ -65,3 +65,19 @@ input {
     font-size: 18px;
     font-weight: 500;
 }
+
+@media screen and (max-width: 820px) {
+    .title {
+        text-align: center;
+        margin: 60px 0;
+    }
+    .container {
+        height: auto;
+    }
+    .submit {
+        width: auto;
+    }
+    label {
+        text-align: center;
+    }
+}

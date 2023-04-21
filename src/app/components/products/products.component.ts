@@ -64,10 +64,12 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   @ViewChild('addProductBtn', {static: true}) addProductBtn!: ElementRef;
   @ViewChild('addCategoriaBtn', {static: true}) addCategoriaBtn!: ElementRef;
   @ViewChild('addColorBtn', {static: true}) addColorBtn!: ElementRef;
+  @ViewChild('filtersBtn', {static: true}) filtersBtn!: ElementRef;
   ngAfterViewInit(): void {
     let createProductModal: any = document.querySelector("#create-product-modal");
     let createCategoriaModal: any = document.querySelector("#create-categoria-modal");
     let createColorModal: any = document.querySelector("#create-color-modal");
+    let filters: any = document.querySelector(".category");
 
     this.addProductBtn.nativeElement.addEventListener("click", ()=> {
       createProductModal.style.display = "flex";
@@ -95,6 +97,14 @@ export class ProductsComponent implements OnInit, AfterViewInit {
         }
       }
     });
+
+    this.filtersBtn.nativeElement.addEventListener("click", ()=> {
+      if(filters.style.display == "flex") {
+        filters.style.display = "none";
+      } else {
+        filters.style.display = "flex";
+      }
+    })
   }
 
   filtrarRopaPorCategoria(id: number) {

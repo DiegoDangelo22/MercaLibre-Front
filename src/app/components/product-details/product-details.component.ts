@@ -111,6 +111,8 @@ agregarColor() {
     const fullscreenImageContainer: any = document.querySelector(".img_container_fs");
     // const fsic: any = document.querySelector(".fs-img-container");
 
+    
+    if(window.innerWidth >= 800) {
     imageContainer.addEventListener('click', ()=> {
       fullscreenImageContainer.style.display = "flex";
       closeBtn.style.display = "flex";
@@ -120,6 +122,7 @@ agregarColor() {
         }
       }
     })
+    }
 
     closeBtn.addEventListener('click', ()=> {
       fullscreenImageContainer.style.display = "none";

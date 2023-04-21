@@ -96,6 +96,7 @@ body {
     border: 2px solid #000;
     border-radius: 30px;
     margin-left: 10px;
+    cursor: pointer;
 }
 #add-image-color {
     width: fit-content;
@@ -194,4 +195,47 @@ body {
 .other-images:hover {
     opacity: 1;
     cursor: pointer;
+}
+
+@media screen and (max-width: 820px) {
+    .container {
+        flex-direction: column-reverse;
+        align-items: center;
+        text-align: center;
+    }
+    .subcontainer {
+        width: 100vw;
+        margin-top: 30px;
+    }
+    .color-container {
+        justify-content: center;
+        min-width: fit-content;
+    }
+    .img_container {
+        width: 100%;
+        margin-left: 0;
+        cursor: auto;
+    }
+    .img_container > img {
+        width: inherit;
+    }
+    .otras-imagenes {
+        width: auto;
+    }
+    .details {
+        width: auto;
+    }
+    .div-modal {
+        align-items: center;
+    }
+    #subir-imagen-text {
+        font-size: 14px;
+    }
+    #subir-imagen-logo {
+        width: 60px;
+        vertical-align: middle;
+    }
+    #add-color-btn {
+        align-self: center;
+    }
 }

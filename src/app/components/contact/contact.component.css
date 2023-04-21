@@ -48,3 +48,15 @@ h1, h2, h3, h4 {
     font-size: 30px;
     width: 32px;
 }
+
+@media screen and (max-width: 820px) {
+    .container {
+        width: 100%;
+    }
+    .title {
+        margin-top: 60px;
+    }
+    .contacto-list {
+        overflow-wrap: anywhere;
+    }
+}

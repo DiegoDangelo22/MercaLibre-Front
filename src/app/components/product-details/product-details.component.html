@@ -1,7 +1,7 @@
 <app-header></app-header>
 <body>
 <div class="container">
-    <div>
+    <div class="subcontainer">
         <div class="img_container">
             <img [src]="imagenPorDefecto.nombre" width="450px" (load)="zoomer()" draggable="false">
         </div>
@@ -51,10 +51,10 @@
                     <div class="div-modal">
                         <div class="subir-imagen">
                             <div>
-                                <h2>⬇⬇ Subir imagen ⬇⬇</h2>
+                                <h2 id="subir-imagen-text">⬇⬇ Subir imagen ⬇⬇</h2>
                             </div>
                             <label for="color-imagen">
-                                <img src="../../../assets/upload-image.png" width="10%">
+                                <img src="../../../assets/upload-image.png" id="subir-imagen-logo" width="10%">
                             </label>
                         </div>
                         <input type="file" id="color-imagen" (change)="imageService.onFileSelected($event)" accept="image/*">
