@@ -35,7 +35,7 @@ import { FooterComponent } from './components/footer/footer.component';
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideStorage(() => getStorage())
   ],
-  providers: [HeaderComponent],
+  providers: [HeaderComponent, ProductsComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

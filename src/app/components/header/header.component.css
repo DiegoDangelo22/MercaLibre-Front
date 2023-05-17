@@ -73,10 +73,6 @@ form {
     min-width: 40px;
     cursor: pointer;
 }
-.login-btn:hover {
-    background: #000923;
-    color: #fff;
-}
 .nav {
     display: flex;
     height: fit-content;
@@ -96,6 +92,12 @@ li {
     letter-spacing: 2px;
     border-radius: 10px;
     cursor: pointer;
+}
+button:hover {
+    background: radial-gradient(#ffee93, #fd9b34);
+}
+li:hover {
+    background: radial-gradient(#ffee93, #fd9b34);
 }
 /* MOBILE VIEW */
 @media screen and (max-width: 820px) {

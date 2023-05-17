@@ -22,8 +22,8 @@
         </ng-container>
         <div class="color-container">
             <span>Color: </span>
-            <span *ngIf="colores"></span>
-            <ng-container *ngFor="let color of colores">
+            <span *ngIf="coloresDelItem"></span>
+            <ng-container *ngFor="let color of coloresDelItem">
                 <div class="color-swatch" [style.background-color]="color.hexadecimal" (click)="filtrarRopaPorColor(color.id!)"></div>
             </ng-container>
         </div>
@@ -41,12 +41,16 @@
             <div id="add-color-form">
                 <form class="add-color-modal" (ngSubmit)="agregarColor()">
                     <div class="div-modal">
-                        <label class="label" for="nombre">Color</label>
-                        <input type="text" class="input" id="nombre" name="nombre" [(ngModel)]="color.nombre">
+                        <label for="color" class="label">Color</label>
+                        <select id="color" class="input" name="colorSeleccionado" [(ngModel)]="colorSeleccionado">
+                            <option *ngFor="let color of coloresGenerales" [value]="color.id">{{color.nombre}}</option>
+                        </select>
                     </div>
                     <div class="div-modal">
-                        <label class="label" for="hexadecimal">Hexadecimal</label>
-                        <input type="color" class="input" id="hexadecimal" name="hexadecimal" [(ngModel)]="color.hexadecimal">
+                        <label for="talle" class="label">Talle</label>
+                        <select id="talle" class="input" name="talleSeleccionado" [(ngModel)]="talleSeleccionado">
+                            <option *ngFor="let talle of talles" [value]="talle.id">{{talle.talle}}</option>
+                        </select>
                     </div>
                     <div class="div-modal">
                         <div class="subir-imagen">

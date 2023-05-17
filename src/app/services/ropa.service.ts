@@ -35,6 +35,15 @@ export class RopaService {
     return this.httpClient.get<Ropa[]>(this.URL + `por-color/${id}`);
   }
 
+  public filtrarRopaPorTalle(id: number):Observable<Ropa[]> {
+    return this.httpClient.get<Ropa[]>(this.URL + `por-talle/${id}`);
+  }
+
+  public searchProductsByPriceRange(minPrice: number, maxPrice: number):Observable<Ropa[]> {
+    let params = { minPrice: minPrice.toString(), maxPrice: maxPrice.toString() };
+    return this.httpClient.get<Ropa[]>(this.URL + 'por-precio-rango', {params});
+  }
+
   public lista():Observable<Ropa[]> {
     return this.httpClient.get<Ropa[]>(this.URL + 'lista');
   }

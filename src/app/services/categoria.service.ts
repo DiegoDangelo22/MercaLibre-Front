@@ -19,4 +19,8 @@ export class CategoriaService {
   public save(categoria: Categoria):Observable<any> {
     return this.httpClient.post<any>(this.URL + 'create', categoria);
   }
+
+  public delete(id: number):Observable<any> {
+    return this.httpClient.delete<any>(this.URL + `delete/${id}`);
+  }
 }

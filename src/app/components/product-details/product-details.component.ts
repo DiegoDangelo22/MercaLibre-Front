@@ -4,10 +4,13 @@ import { ActivatedRoute } from '@angular/router';
 import { Color } from 'src/app/model/color';
 import { ImagenColor } from 'src/app/model/imagen-color';
 import { Ropa } from 'src/app/model/ropa';
+import { Talle } from 'src/app/model/talle';
+import { ColorService } from 'src/app/services/color.service';
 import { ImageService } from 'src/app/services/image.service';
 import { ImagenColorService } from 'src/app/services/imagen-color.service';
 import { RopaService } from 'src/app/services/ropa.service';
 import { TokenService } from 'src/app/services/security/token.service';
+import { TalleService } from 'src/app/services/talle.service';
 
 @Component({
   selector: 'app-product-details',
@@ -16,18 +19,20 @@ import { TokenService } from 'src/app/services/security/token.service';
 })
 export class ProductDetailsComponent implements OnInit, AfterViewInit {
   products: any
-  colores: any[] = [];
+  coloresDelItem: any[] = [];
+  coloresGenerales: any[] = [];
   imagenes: any[] = [];
   colorForm!: FormGroup;
-  nombre: any;
-  hexadecimal: any;
   color: any = {};
+  colorSeleccionado: any;
+  talleSeleccionado: any;
+  talles: any[] = [];
   imagenFiltrada: any[] = [];
   imagenPorDefecto: any;
   isLogged = false;
   isAdmin = false;
 
-  constructor(private ropaService: RopaService, private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder, public imageService: ImageService, private tokenServ: TokenService, private cdr: ChangeDetectorRef) {}
+  constructor(private ropaService: RopaService, private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder, public imageService: ImageService, private tokenServ: TokenService, private colorServ: ColorService, private talleServ: TalleService) {}
 
   ngOnInit(): void {
     this.colorForm = this.formBuilder.group({
@@ -44,10 +49,18 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit {
       this.isAdmin = false;
     }
 
+    this.colorServ.lista().subscribe(data => {
+      this.coloresGenerales = data;
+    })
+
+    this.talleServ.lista().subscribe(data => {
+      this.talles = data;
+    })
+
     const id = this.activatedRoute.snapshot.params['id'];
     this.ropaService.detail(id).subscribe(data => {
       this.products = data;
-      this.colores = this.products.colores;
+      this.coloresDelItem = this.products.colores;
       this.imagenes = this.products.imagenesColor;
       this.imagenPorDefecto = this.imagenes.reduce((prev, current) => {
         return (prev.id < current.id) ? prev : current;
@@ -74,11 +87,11 @@ agregarColor() {
   const id = this.activatedRoute.snapshot.params['id'];
   this.imageService.onUpload().then((url: string) => {
     this.ropaService.detail(id).subscribe(data => {
-      const color: Color = new Color(this.color.nombre, this.color.hexadecimal);
-      const imagenColor: ImagenColor = new ImagenColor(url, color as Color, {id: data.id} as unknown as Ropa);
+      const color: Color = this.colorSeleccionado;
+      const talle: Talle = this.talleSeleccionado;
+      const imagenColor: ImagenColor = new ImagenColor(url, {id: color} as unknown as Color, {id: data.id} as unknown as Ropa, {id: talle} as unknown as Talle);
       this.ropaService.agregarColor(id, imagenColor).subscribe((response: any) => {
           const res = response as Ropa;
-          location.reload();
           console.log(res);
           console.log("La ropa se guardó correctamente");
         });

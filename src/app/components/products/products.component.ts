@@ -5,11 +5,13 @@ import { Categoria } from 'src/app/model/categoria';
 import { Color } from 'src/app/model/color';
 import { ImagenColor } from 'src/app/model/imagen-color';
 import { Ropa } from 'src/app/model/ropa';
+import { Talle } from 'src/app/model/talle';
 import { CategoriaService } from 'src/app/services/categoria.service';
 import { ColorService } from 'src/app/services/color.service';
 import { ImageService } from 'src/app/services/image.service';
 import { RopaService } from 'src/app/services/ropa.service';
 import { TokenService } from 'src/app/services/security/token.service';
+import { TalleService } from 'src/app/services/talle.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -21,18 +23,23 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   products: Ropa[] = [];
   categorias: Categoria[] = [];
   colores: Color[] = [];
+  talles: Talle[] = [];
   ropaId: any;
   nombre: string = '';
   descripcion: string = '';
   colorSeleccionado: any;
+  talleSeleccionado: any;
+  talleNombre: any;
   colorNombre: any;
   precio: number = 0;
   categoriaSeleccionada: any;
   categoriaNombre: any;
+  minPrice!: number;
+  maxPrice!: number;
   isLogged = false;
   isAdmin = false;
 
-  constructor(private ropaService: RopaService, private categoriaService: CategoriaService, private colorService: ColorService, public imgServ: ImageService, public activatedRoute: ActivatedRoute, public http: HttpClient, private tokenServ: TokenService) {}
+  constructor(private ropaService: RopaService, private categoriaService: CategoriaService, private colorService: ColorService, public talleService: TalleService, public imgServ: ImageService, public activatedRoute: ActivatedRoute, public http: HttpClient, private tokenServ: TokenService) {}
 
   ngOnInit(): void {
     if(this.tokenServ.getToken()) {
@@ -55,6 +62,10 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       this.colores = data;
     })
 
+    this.talleService.lista().subscribe(data => {
+      this.talles = data;
+    })
+
     let container: any = document.querySelector(".container");
     if(this.isAdmin === false) {
       container.style.display = 'none';
@@ -64,11 +75,13 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   @ViewChild('addProductBtn', {static: true}) addProductBtn!: ElementRef;
   @ViewChild('addCategoriaBtn', {static: true}) addCategoriaBtn!: ElementRef;
   @ViewChild('addColorBtn', {static: true}) addColorBtn!: ElementRef;
+  @ViewChild('addTalleBtn', {static: true}) addTalleBtn!: ElementRef;
   @ViewChild('filtersBtn', {static: true}) filtersBtn!: ElementRef;
   ngAfterViewInit(): void {
     let createProductModal: any = document.querySelector("#create-product-modal");
     let createCategoriaModal: any = document.querySelector("#create-categoria-modal");
     let createColorModal: any = document.querySelector("#create-color-modal");
+    let createTalleModal: any = document.querySelector("#create-talle-modal");
     let filters: any = document.querySelector(".category");
 
     this.addProductBtn.nativeElement.addEventListener("click", ()=> {
@@ -98,11 +111,28 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       }
     });
 
+    this.addTalleBtn.nativeElement.addEventListener("click", ()=> {
+      createTalleModal.style.display = "flex";
+      window.onclick = function(event) {
+        if(event.target == createTalleModal) {
+          createTalleModal.style.display = "none";
+        }
+      }
+    })
+
     this.filtersBtn.nativeElement.addEventListener("click", ()=> {
       if(filters.style.display == "flex") {
-        filters.style.display = "none";
+          filters.classList.remove("smooth-sliding");
+          filters.classList.add("smooth-sliding-close");
+          setTimeout(() => {
+            filters.style.display = "none"
+          }, 500);
       } else {
-        filters.style.display = "flex";
+          filters.style.display = "flex";
+          setTimeout(() => {
+            filters.classList.add("smooth-sliding");
+            filters.classList.remove("smooth-sliding-close")
+          }, 10);
       }
     })
   }
@@ -117,6 +147,18 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     this.ropaService.filtrarRopaPorColor(id).subscribe(ropas => {
       this.products = ropas;
     });
+  }
+
+  filtrarRopaPorTalle(id: number) {
+    this.ropaService.filtrarRopaPorTalle(id).subscribe(ropas => {
+      this.products = ropas;
+    })
+  }
+
+  searchProductsByPriceRange(): void {
+    this.ropaService.searchProductsByPriceRange(this.minPrice, this.maxPrice).subscribe(ropas => {
+      this.products = ropas;
+    })
   }
 
   getImagenRopaNombre(ropa: any[], ropaId: number) {
@@ -136,7 +178,8 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       const imagenColor = {
         nombre: url,
         color: {id: Number(this.colorSeleccionado)} as Color,
-        ropas: {id: this.ropaId} as Ropa
+        ropas: {id: this.ropaId} as Ropa,
+        talle: {id: this.talleSeleccionado} as Talle
       };
     
       // Finalmente, creas un objeto de tipo Ropa con la información del formulario y el objeto imagenColor que acabas de crear
@@ -151,9 +194,8 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     
       // Guardas la ropa en el servidor
       this.ropaService.save(ropa).subscribe({next: data => {
-        console.log(ropa);
         console.log("Ropa guardada correctamente");
-        this.products.push(ropa);
+        this.cargarRopa();
         let modal: any = document.querySelector("#create-product-modal");
         modal.style.display = "none";
       },
@@ -169,6 +211,17 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     });
   }
   
+  createTalle(): void {
+    const talle = new Talle(this.talleNombre);
+    this.talleService.save(talle).subscribe(data => {
+      console.log("Talle guardado correctamente");
+      this.cargarTalle();
+      let modal: any = document.querySelector("#create-talle-modal");
+      modal.style.display = "none";
+    }, err => {
+      alert(err.error.mensaje);
+    });
+  }
 
   createColor(): void {
     let colorValue: any = document.querySelector(".color");
@@ -176,7 +229,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     const color = new Color(this.colorNombre, colorValue.value);
     this.colorService.save(color).subscribe(data => {
       console.log("Color guardado correctamente");
-      this.colores.push(color);
+      this.cargarColor();
       let modal: any = document.querySelector("#create-color-modal");
       modal.style.display = "none";
     }, err => {
@@ -188,7 +241,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     const categoria = new Categoria(this.categoriaNombre);
     this.categoriaService.save(categoria).subscribe(data => {
       console.log("Categoría guardada correctamente");
-      this.categorias.push(categoria);
+      this.cargarCategoria();
       let modal: any = document.querySelector("#create-categoria-modal");
       modal.style.display = "none";
     }, err => {
@@ -200,12 +253,61 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     this.ropaService.lista().subscribe(data => {this.products = data});
   }
 
-  delete(id: number): void {
+  cargarCategoria(): void {
+    this.categoriaService.lista().subscribe(data => {this.categorias = data});
+  }
+
+  cargarColor(): void {
+    this.colorService.lista().subscribe(data => {this.colores = data});
+  }
+
+  cargarTalle(): void {
+    this.talleService.lista().subscribe(data => {this.talles = data});
+  }
+
+  deleteRopa(id: number): void {
     if(id != undefined) {
       this.ropaService.delete(id).subscribe({next: ()=> {
         this.cargarRopa();
       }, complete: ()=> {
-        console.log("Eliminación correcta");
+        console.log("Producto eliminado");
+      }})
+    }
+  }
+
+  deleteCategoria(id: number): void {
+    if(id != undefined) {
+      this.categoriaService.delete(id).subscribe({next: ()=> {
+        this.cargarCategoria();
+        this.cargarRopa();
+      }, complete: ()=> {
+        console.log("Categoría eliminada")
+      }})
+    }
+  }
+
+  deleteColor(id: number): void {
+    if(id != undefined) {
+      this.colorService.delete(id).subscribe({next: ()=> {
+        this.cargarColor();
+        this.cargarRopa();
+      }, complete: ()=> {
+        console.log("Color eliminado")
+      }, error: ()=> {
+        console.log("Error al eliminar el color")
+      }})
+    }
+  }
+
+  deleteTalle(id: number): void {
+    if(id != undefined) {
+      this.talleService.delete(id).subscribe({next: ()=> {
+        this.cargarTalle();
+        this.cargarRopa();
+      }, complete: ()=> {
+        console.log("Talle eliminado")
+      }, error: ()=> {
+        console.log("Error al eliminar el talle")
       }})
     }
   }

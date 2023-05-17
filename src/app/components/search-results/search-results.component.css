@@ -34,11 +34,7 @@ h1, h2, h3, h4 {
 }
 .category > h2 {
     box-shadow: 10px 6px 20px 0px rgba(0,0,0,0.18);
-}
-.category > ul > li {
-    letter-spacing: 2px;
-    font-size: 18px;
-    margin-top: 10px;
+    min-width: fit-content;
 }
 #categorias-text {
     background: radial-gradient(#ffee93, #eab941);
@@ -50,29 +46,89 @@ h1, h2, h3, h4 {
     margin-top: 30px;
     user-select: none;
 }
+.text-delete-btn-container {
+    width: 100%;
+}
 #color-text {
     margin: 30px 0;
     font-weight: 800;
 }
-.color-text {
-    margin-top: 0 !important;
+#talle-text {
+    margin: 30px 0;
+    font-weight: 800;
 }
-#colores {
+#price-filter-text {
+    margin: 30px 0;
+    font-weight: 800;
+}
+.price-filter-container {
+    display: flex;
+    gap: 20px;
+    margin: 0 20px;
+    width: fit-content;
+}
+.price-filter-container > div {
+    width: 50%;
+}
+.price-filter-container > div > label {
+    padding: 0;
+    margin: 0;
+}
+.price-filter-container > div > input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0 0 0;
+    box-sizing: border-box;
+}
+.price-filter-btn {
+    border-radius: 100px;
+    border: none;
+    width: 40px;
+    height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 10px 80px 0 0;
+    margin: 15px auto;
+}
+.price-filter-btn > i {
+    font-size: 22px;
+}
+/* REMOVE INPUT TYPE BUTTON ARROWS */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+/* FIN */
+.color-text {
+    margin-top: 0 !important;
+    display: flex;
+    justify-content: space-between;
+}
+.color-text > p {
+    width: 100%;
+    text-align: start;
+    padding: 0 15px;
 }
 #colores > li {
     list-style: none;
-    width: 0%;
-    padding-left: 10px;
+    width: 40px;
+    margin-left: 15px;
 }
-#colores:hover {
+#colores > .text-delete-btn-container > li > p:hover {
     font-weight: 600;
     transition: 0.1s ease-out;
 }
-#categorias:hover {
+#categorias > li > p:hover {
+    font-weight: 600;
+    transition: 0.1s ease-out;
+}
+.talle-nombre:hover {
     font-weight: 600;
     transition: 0.1s ease-out;
 }
@@ -82,9 +138,26 @@ h1, h2, h3, h4 {
     height: 20px;
     border: 1px solid #000;
     border-radius: 50px;
+    margin: 5px 0;
 }
 .cursor {
     cursor: pointer;
+}
+.delete-btn {
+    box-shadow: none;
+    font-size: 20px;
+    padding: 0;
+    margin: 0 10px;
+    width: 20px;
+    height: 100%;
+    align-self: center;
+    color: #000;
+    font-weight: 500;
+    letter-spacing: 2px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    border: none;
+    box-shadow: 10px 8px 20px 0px rgba(0,0,0,0.18);
 }
 .products-container {
     width: 80%;
@@ -102,12 +175,12 @@ h1, h2, h3, h4 {
     display: grid;
     align-self: end;
     box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.2);
-    cursor: pointer;
 }
 .product-img {
     display: grid;
     align-self: end;
     position: relative;
+    cursor: pointer;
 }
 .layout {
     position: absolute;
@@ -120,6 +193,9 @@ h1, h2, h3, h4 {
     transition: 0.2s ease-in-out;
     background: rgba(0,0,0,0.5);
 }
+.product-img > img {
+    margin: auto;
+}
 .product-details {
     padding: 20px;
     line-height: 1.5;
@@ -129,6 +205,7 @@ h1, h2, h3, h4 {
     max-width: 200px;
     box-sizing: border-box;
     text-align: center;
+    overflow-wrap: break-word;
 }
 .product-details > h3 {
     font-size: 20px;
@@ -156,6 +233,10 @@ button {
     text-transform: uppercase;
     border: none;
     box-shadow: 10px 8px 20px 0px rgba(0,0,0,0.18);
+    cursor: pointer;
+}
+button:hover {
+    background: radial-gradient(#ffee93, #fd9b34);
 }
 .no-results {
     display: flex;
@@ -188,4 +269,69 @@ button {
     .products {
         margin: 40px 0 0 0;
     }
+}
+
+.user-styles {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 10px 0 0 0;
+}
+.user-styles .color-swatch {
+    min-width: 20px;
+    width: 20px;
+    margin: 5px 0;
+}
+.user-styles .text-delete-btn-container {
+    width: 40px;
+    margin-left: 15px;
+}
+.user-styles .color-text {
+    overflow-wrap: unset;
+}
+.user-styles .color-text > p {
+    padding: 0;
+}
+.user-styles > li {
+    letter-spacing: 2px;
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    overflow-wrap: unset;
+}
+.user-styles > li > p {
+    width: 80px;
+    text-align: start;
+}
+.admin-styles {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 80px 0 0;
+    width: 100%;
+}
+.color-styles {
+    box-sizing: border-box;
+    padding-left: 10px;
+}
+.admin-styles > li {
+    letter-spacing: 2px;
+    font-size: 18px;
+    display: flex;
+    justify-content: space-between;
+    overflow-wrap: anywhere;
+    width: 100%;
+}
+.admin-styles > li > p {
+    width: 100%;
+    text-align: start;
+    padding: 0 10px 0 20px;
+}
+.admin-styles .color-swatch {
+    margin: 0 10px 0 10px;
+    width: 25px;
+}
+.admin-styles .talle-nombre {
+    margin-left: 20px;
 }

@@ -9,6 +9,8 @@ import { TokenService } from 'src/app/services/security/token.service';
 import { Categoria } from 'src/app/model/categoria';
 import { CategoriaService } from 'src/app/services/categoria.service';
 import { ColorService } from 'src/app/services/color.service';
+import { TalleService } from 'src/app/services/talle.service';
+import { Talle } from 'src/app/model/talle';
 
 @Component({
   selector: 'app-search-results',
@@ -19,11 +21,14 @@ export class SearchResultsComponent implements OnInit, OnChanges {
   resultados: Ropa[] = [];
   categorias: Categoria[] = [];
   colores: Color[] = [];
+  talles: Talle[] = [];
+  minPrice!: number;
+  maxPrice!: number;
   isLogged = false;
   isAdmin = false;
   terminoBusqueda: string = this.router.url.substr(8);
   
-  constructor(private ropaService: RopaService, public header: HeaderComponent, public router: Router, public actRoute: ActivatedRoute, public tokenServ: TokenService, public categoriaService: CategoriaService, public colorService: ColorService) {
+  constructor(private ropaService: RopaService, public header: HeaderComponent, public router: Router, public actRoute: ActivatedRoute, public tokenServ: TokenService, public categoriaService: CategoriaService, public colorService: ColorService, public talleService: TalleService) {
     this.actRoute.params.subscribe(params => {
       const termino = params['termino'];
       this.ropaService.buscarRopa(termino).subscribe(data => {
@@ -49,6 +54,10 @@ export class SearchResultsComponent implements OnInit, OnChanges {
 
     this.colorService.lista().subscribe(data => {
       this.colores = data;
+    })
+
+    this.talleService.lista().subscribe(data => {
+      this.talles = data;
     })
   }
 
@@ -76,6 +85,18 @@ export class SearchResultsComponent implements OnInit, OnChanges {
     this.ropaService.lista().subscribe(data => {this.resultados = data});
   }
 
+  cargarCategoria(): void {
+    this.categoriaService.lista().subscribe(data => {this.categorias = data});
+  }
+
+  cargarColor(): void {
+    this.colorService.lista().subscribe(data => {this.colores = data});
+  }
+
+  cargarTalle(): void {
+    this.talleService.lista().subscribe(data => {this.talles = data});
+  }
+
   filtrarRopaPorCategoria(id: number) {
     this.ropaService.filtrarRopaPorCategoria(id).subscribe(ropas => {
       this.resultados = ropas;
@@ -88,12 +109,59 @@ export class SearchResultsComponent implements OnInit, OnChanges {
     });
   }
 
-  delete(id: number): void {
+  filtrarRopaPorTalle(id: number) {
+    this.ropaService.filtrarRopaPorTalle(id).subscribe(ropas => {
+      this.resultados = ropas;
+    });
+  }
+
+  searchProductsByPriceRange(): void {
+    this.ropaService.searchProductsByPriceRange(this.minPrice, this.maxPrice).subscribe(ropas => {
+      this.resultados = ropas;
+    })
+  }
+
+  deleteRopa(id: number): void {
     if(id != undefined) {
       this.ropaService.delete(id).subscribe({next: ()=> {
         this.cargarRopa();
       }, complete: ()=> {
         console.log("Eliminación correcta");
+      }})
+    }
+  }
+
+  deleteCategoria(id: number): void {
+    if(id != undefined) {
+      this.categoriaService.delete(id).subscribe({next: ()=> {
+        this.cargarCategoria();
+      }, complete: ()=> {
+        console.log("Categoría eliminada")
+      }})
+    }
+  }
+
+  deleteColor(id: number): void {
+    if(id != undefined) {
+      this.colorService.delete(id).subscribe({next: ()=> {
+        this.cargarColor();
+      }, complete: ()=> {
+        console.log("Color eliminado")
+      }, error: ()=> {
+        console.log("Error al eliminar el color")
+      }})
+    }
+  }
+
+  deleteTalle(id: number): void {
+    if(id != undefined) {
+      this.talleService.delete(id).subscribe({next: ()=> {
+        this.cargarTalle();
+        this.cargarRopa();
+      }, complete: ()=> {
+        console.log("Talle eliminado")
+      }, error: ()=> {
+        console.log("Error al eliminar el talle")
       }})
     }
   }

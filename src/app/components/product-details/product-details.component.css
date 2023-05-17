@@ -114,6 +114,12 @@ body {
     border-radius: 10px;
     box-shadow: 10px 8px 20px 0px rgba(0,0,0,0.18);
 }
+#add-image-color-btn:hover {
+    background: radial-gradient(#ffee93, #fd9b34);
+}
+button {
+    cursor: pointer;
+}
 #add-color-form {
     display: none;
     position: fixed;
@@ -180,6 +186,9 @@ body {
     text-transform: uppercase;
     border: none;
     box-shadow: 10px 8px 20px 0px rgba(0,0,0,0.18);
+}
+#add-color-btn:hover {
+    background: radial-gradient(#ffee93, #fd9b34);
 }
 .otras-imagenes {
     display: flex;

@@ -19,4 +19,8 @@ export class ColorService {
   public save(color: Color):Observable<any> {
     return this.httpClient.post<any>(this.URL + 'create', color);
   }
+
+  public delete(id: number):Observable<any> {
+    return this.httpClient.delete<any>(this.URL + `delete/${id}`);
+  }
 }

@@ -4,35 +4,60 @@
     <h1>Resultados</h1>
 </div>
 <div>
-<div class="category">
-    <h2 id="categorias-text">CATEGORIAS</h2>
-    <ul *ngFor="let categoria of categorias" id="categorias" class="cursor">
-        <li (click)="filtrarRopaPorCategoria(categoria.id!)">{{categoria.nombre}}</li>
-    </ul>
-    <h2 id="filtros-text">FILTROS</h2>
-    <h4 id="color-text">COLOR</h4>
-    <ul id="colores" *ngFor="let color of colores" (click)="filtrarRopaPorColor(color.id!)" class="cursor">
-        <div class="color-swatch" [style.background-color]="color.hexadecimal"></div>
-        <li class="color-text">{{color.nombre}}</li>
-    </ul>
-</div>
-<div class="products-container">
-    <div class="no-results" *ngIf="resultados.length === 0"><i class="fa-regular fa-face-sad-cry"></i>No se encontraron resultados.</div>
-    <div class="products" *ngFor="let product of resultados">
-          <div class="product-img" routerLink="/details/{{product.id}}">
-              <div class="layout"></div>
-              <img [src]="product.imagenesColor[0].nombre" width="150px">
-          </div>
-          <div class="product-details" routerLink="/details/{{product.id}}">
-              <h3>{{product.nombre}}</h3>
-              <h4>{{product.descripcion}}</h4>
-              <h4>${{product.precio}}</h4>
-          </div>
-          <div class="crud-btn" *ngIf="isAdmin">
-              <button (click)="delete(product.id!)">Eliminar</button>
-          </div>
+    <div class="category">
+        <h2 id="categorias-text">CATEGORIAS</h2>
+        <ul *ngFor="let categoria of categorias" id="categorias" [ngClass]="{'user-styles':!isAdmin, 'admin-styles':isAdmin}">
+            <li (click)="filtrarRopaPorCategoria(categoria.id!)">
+                <p class="cursor">{{categoria.nombre}}</p>
+                <button class="delete-btn" (click)="deleteCategoria(categoria.id!)" *ngIf="isAdmin"><i class="fa-solid fa-circle-xmark"></i></button>
+            </li>
+        </ul>
+        <h2 id="filtros-text">FILTROS</h2>
+        <h4 id="color-text">COLOR</h4>
+        <ul id="colores" *ngFor="let color of colores" (click)="filtrarRopaPorColor(color.id!)" [ngClass]="{'user-styles':!isAdmin, 'admin-styles':isAdmin, 'color-styles':isAdmin}">
+            <div class="color-swatch" [style.background-color]="color.hexadecimal"></div>
+            <div class="text-delete-btn-container">
+                <li class="color-text">
+                    <p class="cursor">{{color.nombre}}</p>
+                    <button class="delete-btn" (click)="deleteColor(color.id!)" *ngIf="isAdmin"><i class="fa-solid fa-circle-xmark"></i></button>
+                </li>
+            </div>
+        </ul>
+        <h4 id="talle-text">TALLE</h4>
+        <ul *ngFor="let talle of talles" (click)="filtrarRopaPorTalle(talle.id!)" [ngClass]="{'user-styles':!isAdmin, 'admin-styles':isAdmin}">
+            <li class="cursor talle-nombre">{{talle.talle}}</li>
+            <button class="delete-btn" (click)="deleteTalle(talle.id!)" *ngIf="isAdmin"><i class="fa-solid fa-circle-xmark"></i></button>
+        </ul>
+        <h4 id="price-filter-text">PRECIO</h4>
+        <div class="price-filter-container">
+            <div>
+                <label for="minPrice">Precio mínimo</label>
+                <input type="number" id="minPrice" [(ngModel)]="minPrice">
+            </div>
+            <div>
+                <label for="maxPrice">Precio máximo</label>
+                <input type="number" id="maxPrice" [(ngModel)]="maxPrice">
+            </div>
+        </div>
+        <button class="price-filter-btn" (click)="searchProductsByPriceRange()"><i class="fa-solid fa-magnifying-glass-dollar"></i></button>
     </div>
-</div>
-</div>
+    <div class="products-container">
+        <div class="no-results" *ngIf="resultados.length === 0"><i class="fa-regular fa-face-sad-cry"></i>No se encontraron resultados.</div>
+          <div class="products" *ngFor="let product of resultados">
+                <div class="product-img" routerLink="/details/{{product.id}}">
+                    <div class="layout"></div>
+                    <img [src]="product.imagenesColor[0].nombre" width="150px">
+                </div>
+                <div class="product-details" routerLink="/details/{{product.id}}">
+                    <h3>{{product.nombre}}</h3>
+                    <h4>{{product.descripcion}}</h4>
+                    <h4>${{product.precio}}</h4>
+                </div>
+                <div class="crud-btn" *ngIf="isAdmin">
+                    <button (click)="deleteRopa(product.id!)">Eliminar</button>
+                </div>
+          </div>
+      </div>
+    </div>
 </body>
 <app-footer></app-footer>

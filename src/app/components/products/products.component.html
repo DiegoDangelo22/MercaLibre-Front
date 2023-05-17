@@ -5,28 +5,52 @@
         <button class="btn123" #filtersBtn>Filtros</button>
         <div class="category">
             <h2 id="categorias-text">CATEGORIAS</h2>
-            <ul *ngFor="let categoria of categorias" id="categorias" class="cursor">
-                <li (click)="filtrarRopaPorCategoria(categoria.id!)">{{categoria.nombre}}</li>
+            <ul *ngFor="let categoria of categorias" id="categorias" [ngClass]="{'user-styles':!isAdmin, 'admin-styles':isAdmin}">
+                <li class="cursor" (click)="filtrarRopaPorCategoria(categoria.id!)">{{categoria.nombre}}</li>
+                <button class="delete-btn" (click)="deleteCategoria(categoria.id!)" *ngIf="isAdmin"><i class="fa-solid fa-circle-xmark"></i></button>
             </ul>
             <h2 id="filtros-text">FILTROS</h2>
             <h4 id="color-text">COLOR</h4>
-            <ul id="colores" *ngFor="let color of colores" (click)="filtrarRopaPorColor(color.id!)" class="cursor">
+            <ul id="colores" *ngFor="let color of colores" (click)="filtrarRopaPorColor(color.id!)" [ngClass]="{'user-styles':!isAdmin, 'admin-styles':isAdmin}">
                 <div class="color-swatch" [style.background-color]="color.hexadecimal"></div>
-                <li class="color-text">{{color.nombre}}</li>
+                <li class="color-text">
+                    <p class="cursor">{{color.nombre}}</p>
+                    <button class="delete-btn" (click)="deleteColor(color.id!)" *ngIf="isAdmin"><i class="fa-solid fa-circle-xmark"></i></button>
+                </li>
             </ul>
+            <h4 id="talle-text">TALLE</h4>
+    <ul *ngFor="let talle of talles" (click)="filtrarRopaPorTalle(talle.id!)" [ngClass]="{'user-styles':!isAdmin, 'admin-styles':isAdmin}">
+        <li class="cursor talle-nombre">{{talle.talle}}</li>
+        <button class="delete-btn" (click)="deleteTalle(talle.id!)" *ngIf="isAdmin"><i class="fa-solid fa-circle-xmark"></i></button>
+    </ul>
+    <h4 id="price-filter-text">PRECIO</h4>
+    <div class="price-filter-container">
+        <div>
+            <label for="minPrice">Precio mínimo</label>
+            <input type="number" id="minPrice" [(ngModel)]="minPrice">
+        </div>
+        <div>
+            <label for="maxPrice">Precio máximo</label>
+            <input type="number" id="maxPrice" [(ngModel)]="maxPrice">
+        </div>
+    </div>
+    <button class="price-filter-btn" (click)="searchProductsByPriceRange()"><i class="fa-solid fa-magnifying-glass-dollar"></i></button>
         </div>
     </div>
 </div>
 <div class="container">
   <div class="subcontainer">
       <div class="add-product">
-          <button class="btn123" #addProductBtn>Agregar producto</button>
+        <button class="btn123" #addProductBtn>Agregar producto</button>
       </div>
       <div class="add-categoria">
-          <button class="btn123" #addCategoriaBtn>Agregar categoría</button>
+        <button class="btn123" #addCategoriaBtn>Agregar categoría</button>
       </div>
       <div class="add-color">
-          <button class="btn123" #addColorBtn>Agregar color</button>
+        <button class="btn123" #addColorBtn>Agregar color</button>
+      </div>
+      <div class="add-color">
+        <button class="btn123" #addTalleBtn>Agregar talle</button>
       </div>
   </div>
 </div>
@@ -36,15 +60,40 @@
 <div>
 <div class="category">
     <h2 id="categorias-text">CATEGORIAS</h2>
-    <ul *ngFor="let categoria of categorias" id="categorias" class="cursor">
-        <li (click)="filtrarRopaPorCategoria(categoria.id!)">{{categoria.nombre}}</li>
+    <ul *ngFor="let categoria of categorias" id="categorias" [ngClass]="{'user-styles':!isAdmin, 'admin-styles':isAdmin}">
+        <li (click)="filtrarRopaPorCategoria(categoria.id!)">
+            <p class="cursor">{{categoria.nombre}}</p>
+            <button class="delete-btn" (click)="deleteCategoria(categoria.id!)" *ngIf="isAdmin"><i class="fa-solid fa-circle-xmark"></i></button>
+        </li>
     </ul>
     <h2 id="filtros-text">FILTROS</h2>
     <h4 id="color-text">COLOR</h4>
-    <ul id="colores" *ngFor="let color of colores" (click)="filtrarRopaPorColor(color.id!)" class="cursor">
+    <ul id="colores" *ngFor="let color of colores" (click)="filtrarRopaPorColor(color.id!)" [ngClass]="{'user-styles':!isAdmin, 'admin-styles':isAdmin, 'color-styles':isAdmin}">
         <div class="color-swatch" [style.background-color]="color.hexadecimal"></div>
-        <li class="color-text">{{color.nombre}}</li>
+        <div class="text-delete-btn-container">
+            <li class="color-text">
+                <p class="cursor">{{color.nombre}}</p>
+                <button class="delete-btn" (click)="deleteColor(color.id!)" *ngIf="isAdmin"><i class="fa-solid fa-circle-xmark"></i></button>
+            </li>
+        </div>
     </ul>
+    <h4 id="talle-text">TALLE</h4>
+    <ul *ngFor="let talle of talles" (click)="filtrarRopaPorTalle(talle.id!)" [ngClass]="{'user-styles':!isAdmin, 'admin-styles':isAdmin}">
+        <li class="cursor talle-nombre">{{talle.talle}}</li>
+        <button class="delete-btn" (click)="deleteTalle(talle.id!)" *ngIf="isAdmin"><i class="fa-solid fa-circle-xmark"></i></button>
+    </ul>
+    <h4 id="price-filter-text">PRECIO</h4>
+    <div class="price-filter-container">
+        <div>
+            <label for="minPrice">Precio mínimo</label>
+            <input type="number" id="minPrice" [(ngModel)]="minPrice">
+        </div>
+        <div>
+            <label for="maxPrice">Precio máximo</label>
+            <input type="number" id="maxPrice" [(ngModel)]="maxPrice">
+        </div>
+    </div>
+    <button class="price-filter-btn" (click)="searchProductsByPriceRange()"><i class="fa-solid fa-magnifying-glass-dollar"></i></button>
 </div>
 <div class="products-container">
       <div class="products" *ngFor="let product of products">
@@ -58,7 +107,7 @@
                 <h4>${{product.precio}}</h4>
             </div>
             <div class="crud-btn" *ngIf="isAdmin">
-                <button (click)="delete(product.id!)">Eliminar</button>
+                <button (click)="deleteRopa(product.id!)">Eliminar</button>
             </div>
       </div>
   </div>
@@ -84,6 +133,12 @@
             <label for="color">Color</label>
             <select id="color" name="colorSeleccionado" [(ngModel)]="colorSeleccionado">
                 <option *ngFor="let color of colores" [value]="color.id">{{color.nombre}}</option>
+            </select>
+        </div>
+        <div class="div-modal">
+            <label for="talle">Talle</label>
+            <select id="talle" name="talleSeleccionado" [(ngModel)]="talleSeleccionado">
+                <option *ngFor="let talle of talles" [value]="talle.id">{{talle.talle}}</option>
             </select>
         </div>
         <div class="div-modal">
@@ -128,6 +183,17 @@
         </div>
         <div class="div-modal">
             <button class="modal-add-btn" id="color-add-btn">Agregar color</button>
+        </div>
+    </form>
+</div>
+<div class="modal-container" id="create-talle-modal">
+    <form class="modal" (ngSubmit)="createTalle()">
+        <div class="div-modal">
+            <label for="talle-nombre" id="talle-name-label">Talle</label>
+            <input type="text" id="talle-nombre" name="talleNombre" [(ngModel)]="talleNombre">
+        </div>
+        <div class="div-modal">
+            <button class="modal-add-btn" id="talle-add-btn">Agregar talle</button>
         </div>
     </form>
 </div>
