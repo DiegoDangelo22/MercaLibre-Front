@@ -1,5 +1,5 @@
 <app-header></app-header>
-<body>
+<body [class.dark-theme]="darkTheme">
 <div class="container">
     <div class="subcontainer">
         <div class="img_container">
@@ -27,7 +27,15 @@
                 <div class="color-swatch" [style.background-color]="color.hexadecimal" (click)="filtrarRopaPorColor(color.id!)"></div>
             </ng-container>
         </div>
-        <div>
+        <div class="talle-container">
+            <span>Talle: </span>
+            <ng-container *ngFor="let talle of talles">
+                <ng-container *ngIf="imagenPorDefecto.talle === talle.id">
+                    <span>{{talle.talle}}</span>
+                </ng-container>
+            </ng-container>
+        </div>
+        <div id="modal-container">
             <div id="add-image-color" [hidden]="!isAdmin">
                 <button #addColorBtn id="add-image-color-btn">Agregar imagen y color</button>
             </div>

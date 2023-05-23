@@ -1,3 +1,7 @@
+body {
+    height: 100vh;
+    overflow: hidden;
+}
 .supercontainer {
     height: min-content;
 }
@@ -59,6 +63,10 @@ input {
     text-transform: uppercase;
     border: none;
     box-shadow: 10px 8px 20px 0px rgba(0,0,0,0.18);
+}
+.submit:hover {
+    background: radial-gradient(#ffee93, #fd9b34);
+    cursor: pointer;
 }
 .login-errs {
     text-align: center;

@@ -7,7 +7,7 @@ body {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 30px;
+    margin: 30px 0 50px 0;
 }
 .img_container {
     width: 450px;
@@ -32,8 +32,8 @@ body {
     width: 90%;
     display: flex;
     justify-content: center;
-    margin-bottom: 50px;
     user-select: none;
+    margin-bottom: 5%;
 }
 #fs-image {
     width: 100%;
@@ -45,7 +45,6 @@ body {
     z-index: 40;
     position: relative;
     background: #000;
-    margin: 20px 0;
 }
 .close-btn {
     padding: 20px;
@@ -93,10 +92,15 @@ body {
 .color-swatch {
     width: 26px;
     height: 26px;
-    border: 2px solid #000;
+    border: 2px solid #ffcb00;
     border-radius: 30px;
     margin-left: 10px;
     cursor: pointer;
+}
+.talle-container {
+    padding: 20px 0;
+    border-bottom: 1px solid #eee;
+    text-align: start;
 }
 #add-image-color {
     width: fit-content;
@@ -136,7 +140,6 @@ button {
     color: #fff;
     display: flex;
     flex-direction: column;
-    gap: 10px;
     background: #000;
 }
 .div-modal {
@@ -194,7 +197,7 @@ button {
     display: flex;
     width: 450px;
     flex-wrap: wrap;
-    margin: 20px 0 0 20px;
+    margin: 20px 0 20px 20px;
     gap: 10px;
 }
 .other-images {
@@ -246,5 +249,9 @@ button {
     }
     #add-color-btn {
         align-self: center;
+    }
+    .otras-imagenes {
+        margin: 20px;
+        justify-content: center;
     }
 }

@@ -44,8 +44,9 @@ export class RopaService {
     return this.httpClient.get<Ropa[]>(this.URL + 'por-precio-rango', {params});
   }
 
-  public lista():Observable<Ropa[]> {
-    return this.httpClient.get<Ropa[]>(this.URL + 'lista');
+  public lista(page: number, size: number):Observable<Ropa[]> {
+    let params = { page: page.toString(), size: size.toString() };
+    return this.httpClient.get<Ropa[]>(this.URL + 'lista', {params});
   }
 
   public save(ropa: Ropa):Observable<any> {

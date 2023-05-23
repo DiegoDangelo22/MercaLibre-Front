@@ -1,9 +1,9 @@
 <app-header></app-header>
-<body>
+<body [class.dark-theme]="darkTheme">
 <div class="title">
     <h1>Resultados</h1>
 </div>
-<div>
+<div id="main-container">
     <div class="category">
         <h2 id="categorias-text">CATEGORIAS</h2>
         <ul *ngFor="let categoria of categorias" id="categorias" [ngClass]="{'user-styles':!isAdmin, 'admin-styles':isAdmin}">
@@ -26,7 +26,7 @@
         <h4 id="talle-text">TALLE</h4>
         <ul *ngFor="let talle of talles" (click)="filtrarRopaPorTalle(talle.id!)" [ngClass]="{'user-styles':!isAdmin, 'admin-styles':isAdmin}">
             <li class="cursor talle-nombre">{{talle.talle}}</li>
-            <button class="delete-btn" (click)="deleteTalle(talle.id!)" *ngIf="isAdmin"><i class="fa-solid fa-circle-xmark"></i></button>
+            <!-- <button class="delete-btn" (click)="deleteTalle(talle.id!)" *ngIf="isAdmin"><i class="fa-solid fa-circle-xmark"></i></button> -->
         </ul>
         <h4 id="price-filter-text">PRECIO</h4>
         <div class="price-filter-container">
@@ -54,7 +54,7 @@
                     <h4>${{product.precio}}</h4>
                 </div>
                 <div class="crud-btn" *ngIf="isAdmin">
-                    <button (click)="deleteRopa(product.id!)">Eliminar</button>
+                    <!-- <button (click)="deleteRopa(product.id!)">Eliminar</button> -->
                 </div>
           </div>
       </div>

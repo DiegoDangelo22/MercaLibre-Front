@@ -1,5 +1,5 @@
 <app-header></app-header>
-<body>
+<body [class.dark-theme]="darkTheme">
 <div class="filters-container">
     <div class="filters">
         <button class="btn123" #filtersBtn>Filtros</button>
@@ -57,7 +57,7 @@
 <div class="title">
     <h1>PRODUCTOS</h1>
 </div>
-<div>
+<div class="super-container">
 <div class="category">
     <h2 id="categorias-text">CATEGORIAS</h2>
     <ul *ngFor="let categoria of categorias" id="categorias" [ngClass]="{'user-styles':!isAdmin, 'admin-styles':isAdmin}">

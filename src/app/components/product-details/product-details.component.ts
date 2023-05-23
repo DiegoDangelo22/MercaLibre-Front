@@ -27,14 +27,24 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit {
   colorSeleccionado: any;
   talleSeleccionado: any;
   talles: any[] = [];
+  tallesDelItem: any[] = [];
   imagenFiltrada: any[] = [];
   imagenPorDefecto: any;
   isLogged = false;
   isAdmin = false;
+  brightTheme!: boolean;
+  darkTheme!: boolean;
 
   constructor(private ropaService: RopaService, private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder, public imageService: ImageService, private tokenServ: TokenService, private colorServ: ColorService, private talleServ: TalleService) {}
 
   ngOnInit(): void {
+    if(localStorage.getItem('theme') === "bright") {
+      this.brightTheme = true;
+      this.darkTheme = false;
+    } else if(localStorage.getItem('theme') === "dark") {
+      this.darkTheme = true;
+      this.brightTheme = false;
+    }
     this.colorForm = this.formBuilder.group({
       nombre: ['', Validators.required],
       hexadecimal: ['', Validators.required],
@@ -57,17 +67,7 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit {
       this.talles = data;
     })
 
-    const id = this.activatedRoute.snapshot.params['id'];
-    this.ropaService.detail(id).subscribe(data => {
-      this.products = data;
-      this.coloresDelItem = this.products.colores;
-      this.imagenes = this.products.imagenesColor;
-      this.imagenPorDefecto = this.imagenes.reduce((prev, current) => {
-        return (prev.id < current.id) ? prev : current;
-      });
-    }, err => {
-      alert(err.message);
-    });
+    this.cargarProducto();
   }
 
 @ViewChild('addColorBtn', {static: true}) addColorBtn!: ElementRef;
@@ -83,6 +83,20 @@ ngAfterViewInit(): void {
     });
 }
 
+cargarProducto() {
+  const id = this.activatedRoute.snapshot.params['id'];
+  this.ropaService.detail(id).subscribe(data => {
+    this.products = data;
+    this.coloresDelItem = this.products.colores;
+    this.imagenes = this.products.imagenesColor;
+    this.imagenPorDefecto = this.imagenes.reduce((prev, current) => {
+      return (prev.id < current.id) ? prev : current;
+    });
+  }, err => {
+    alert(err.message);
+  });
+}
+
 agregarColor() {
   const id = this.activatedRoute.snapshot.params['id'];
   this.imageService.onUpload().then((url: string) => {
@@ -92,6 +106,9 @@ agregarColor() {
       const imagenColor: ImagenColor = new ImagenColor(url, {id: color} as unknown as Color, {id: data.id} as unknown as Ropa, {id: talle} as unknown as Talle);
       this.ropaService.agregarColor(id, imagenColor).subscribe((response: any) => {
           const res = response as Ropa;
+          this.cargarProducto();
+          let modal: any = document.querySelector("#modal-container");
+          modal.style.display = "none";
           console.log(res);
           console.log("La ropa se guardó correctamente");
         });
@@ -114,6 +131,7 @@ agregarColor() {
       for (let i = 0; i < data.imagenesColor.length; i++) {
         this.imagenFiltrada = data.imagenesColor.filter(imagen => imagen.color === id as any)
       }
+      // console.log(this.imagenPorDefecto)
       this.imagenPorDefecto = this.imagenFiltrada[0];
     })
   }
@@ -122,6 +140,7 @@ agregarColor() {
     const imageContainer: any = document.querySelector(".img_container");
     const closeBtn: any = document.querySelector(".close-btn");
     const fullscreenImageContainer: any = document.querySelector(".img_container_fs");
+    const footer: any = document.querySelector("app-footer");
     // const fsic: any = document.querySelector(".fs-img-container");
 
     
@@ -129,9 +148,11 @@ agregarColor() {
     imageContainer.addEventListener('click', ()=> {
       fullscreenImageContainer.style.display = "flex";
       closeBtn.style.display = "flex";
+      footer.style.display = "none";
       window.onclick = function(event) {
         if(event.target == fullscreenImageContainer) {
           fullscreenImageContainer.style.display = "none";
+          footer.style.display = "block";
         }
       }
     })
@@ -140,6 +161,7 @@ agregarColor() {
     closeBtn.addEventListener('click', ()=> {
       fullscreenImageContainer.style.display = "none";
       closeBtn.style.display = "none";
+      footer.style.display = "block";
     })
 
   //   fsic.addEventListener("mousedown", (e: any) => {

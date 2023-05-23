@@ -60,6 +60,11 @@ form {
 .magnifying-glass {
     color: #000923;
 }
+.visual-theme-container {
+    width: fit-content;
+    display: flex;
+    background: linear-gradient(#323232, #232323);
+}
 .login-btn-container {
     background: linear-gradient(#323232, #232323);
     display: flex;
@@ -99,8 +104,31 @@ button:hover {
 li:hover {
     background: radial-gradient(#ffee93, #fd9b34);
 }
+.mobile-view-container {
+    display: none;
+}
 /* MOBILE VIEW */
 @media screen and (max-width: 820px) {
+    .visual-theme-container {
+        display: none;
+        background: transparent;
+    }
+    .login-btn-container {
+        display: none;
+        background: transparent;
+    }
+    .mobile-view-container {
+        display: flex;
+        width: 100%;
+        height: 70px;
+        justify-content: center;
+    }
+    .mobile-view-container .visual-theme-container {
+        display: flex;
+    }
+    .mobile-view-container .login-btn-container {
+        display: flex;
+    }
     .header {
         display: flex;
         flex-direction: column;
@@ -112,13 +140,15 @@ li:hover {
     }
     .header-options {
         display: flex;
+        flex-direction: column;
         justify-content: center;
-        height: 70px;
+        height: max-content;
         background: linear-gradient(to left top, #1D1D1D, #1D1D1DF2, #1D1D1DDE);
     }
     .search-form {
         display: flex;
         width: 100%;
+        height: 70px;
         margin: 0;
         gap: 10px;
         justify-content: center;
@@ -128,7 +158,6 @@ li:hover {
         align-items: center;
         width: 244px;
         background: transparent;
-        margin-left: 20px;
     }
     .search-bar {
         font-size: 20px;
@@ -150,11 +179,6 @@ li:hover {
         right: 40px;
         height: 42px;
         min-width: 40px;
-    }
-    .login-btn-container {
-        display: flex;
-        margin-right: 5px;
-        background: transparent;
     }
     .nav {
         justify-content: center;

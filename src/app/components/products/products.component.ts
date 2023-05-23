@@ -38,10 +38,21 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   maxPrice!: number;
   isLogged = false;
   isAdmin = false;
+  currentPage: number = 0;
+  pageSize: number = 10;
+  brightTheme!: boolean;
+  darkTheme!: boolean;
 
   constructor(private ropaService: RopaService, private categoriaService: CategoriaService, private colorService: ColorService, public talleService: TalleService, public imgServ: ImageService, public activatedRoute: ActivatedRoute, public http: HttpClient, private tokenServ: TokenService) {}
 
   ngOnInit(): void {
+    if(localStorage.getItem('theme') === "bright") {
+      this.brightTheme = true;
+      this.darkTheme = false;
+    } else if(localStorage.getItem('theme') === "dark") {
+      this.darkTheme = true;
+      this.brightTheme = false;
+    }
     if(this.tokenServ.getToken()) {
       this.isLogged = true;
       this.isAdmin = true;
@@ -50,9 +61,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       this.isAdmin = false;
     }
 
-    this.ropaService.lista().subscribe(data => {
-      this.products = data;
-    })
+    this.cargarRopa2();
 
     this.categoriaService.lista().subscribe(data => {
       this.categorias = data;
@@ -70,6 +79,8 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     if(this.isAdmin === false) {
       container.style.display = 'none';
     }
+    
+    window.addEventListener('scroll', this.onScroll.bind(this)); 
   }
 
   @ViewChild('addProductBtn', {static: true}) addProductBtn!: ElementRef;
@@ -195,7 +206,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       // Guardas la ropa en el servidor
       this.ropaService.save(ropa).subscribe({next: data => {
         console.log("Ropa guardada correctamente");
-        this.cargarRopa();
+        this.cargarRopa2();
         let modal: any = document.querySelector("#create-product-modal");
         modal.style.display = "none";
       },
@@ -249,8 +260,30 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     });
   }
 
+  onScroll(): void {
+    const windowHeight = 'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight;
+    const body = document.body;
+    const html = document.documentElement;
+    const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+    const windowBottom = windowHeight + window.pageYOffset;
+  
+    if (windowBottom >= docHeight) {
+      this.cargarRopa();
+    }
+  }
+
   cargarRopa(): void {
-    this.ropaService.lista().subscribe(data => {this.products = data});
+    this.currentPage++;
+    this.ropaService.lista(this.currentPage, this.pageSize).subscribe((data:any) => {
+      data.content.forEach((e:any) => {
+        this.products.push(e)
+      })});
+  }
+
+  cargarRopa2(): void {
+    this.ropaService.lista(this.currentPage, this.pageSize).subscribe((data:any) => {
+      this.products = data.content;
+    })
   }
 
   cargarCategoria(): void {
@@ -268,7 +301,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   deleteRopa(id: number): void {
     if(id != undefined) {
       this.ropaService.delete(id).subscribe({next: ()=> {
-        this.cargarRopa();
+        this.cargarRopa2();
       }, complete: ()=> {
         console.log("Producto eliminado");
       }})
@@ -279,7 +312,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     if(id != undefined) {
       this.categoriaService.delete(id).subscribe({next: ()=> {
         this.cargarCategoria();
-        this.cargarRopa();
+        this.cargarRopa2();
       }, complete: ()=> {
         console.log("Categoría eliminada")
       }})
@@ -290,7 +323,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     if(id != undefined) {
       this.colorService.delete(id).subscribe({next: ()=> {
         this.cargarColor();
-        this.cargarRopa();
+        this.cargarRopa2();
       }, complete: ()=> {
         console.log("Color eliminado")
       }, error: ()=> {
@@ -303,7 +336,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     if(id != undefined) {
       this.talleService.delete(id).subscribe({next: ()=> {
         this.cargarTalle();
-        this.cargarRopa();
+        this.cargarRopa2();
       }, complete: ()=> {
         console.log("Talle eliminado")
       }, error: ()=> {

@@ -26,6 +26,9 @@ h1, h2, h3, h4 {
     content: '';
     margin: auto 20px auto 20px;
 }
+#main-container {
+    margin-bottom: 50px;
+}
 .category {
     width: 20%;
     text-align: center;
@@ -109,9 +112,10 @@ input[type=number] {
     margin-top: 0 !important;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 .color-text > p {
-    width: 100%;
+    width: 80px;
     text-align: start;
     padding: 0 15px;
 }
@@ -135,8 +139,9 @@ input[type=number] {
 .color-swatch {
     display: flex;
     width: 20px;
+    min-width: 20px;
     height: 20px;
-    border: 1px solid #000;
+    border: 2px solid #ffcb00;
     border-radius: 50px;
     margin: 5px 0;
 }

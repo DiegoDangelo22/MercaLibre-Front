@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginUsuario } from 'src/app/model/security/login-usuario';
@@ -10,13 +10,15 @@ import { TokenService } from 'src/app/services/security/token.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   isLogged = false;
   isLogginFail = false;
   loginUsuario!: LoginUsuario;
   errMsj!: string;
   roles: string[] = [];
   formLogin: FormGroup;
+  brightTheme!: boolean;
+  darkTheme!: boolean;
   constructor(private tokenService: TokenService, private authService: AuthService, private router: Router, private formBuilder: FormBuilder)
   {
     this.formLogin=this.formBuilder.group(
@@ -25,6 +27,16 @@ export class LoginComponent {
         password:['',[Validators.required]]
       }
     )
+  }
+
+  ngOnInit(): void {
+    if(localStorage.getItem('theme') === "bright") {
+      this.brightTheme = true;
+      this.darkTheme = false;
+    } else if(localStorage.getItem('theme') === "dark") {
+      this.darkTheme = true;
+      this.brightTheme = false;
+    }
   }
 
   onLogin(): void{

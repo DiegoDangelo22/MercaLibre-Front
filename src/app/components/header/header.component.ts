@@ -5,6 +5,10 @@ import { RopaService } from 'src/app/services/ropa.service';
 import { AuthService } from 'src/app/services/security/auth.service';
 import { TokenService } from 'src/app/services/security/token.service';
 import { ProductsComponent } from '../products/products.component';
+import { SearchResultsComponent } from '../search-results/search-results.component';
+import { ContactComponent } from '../contact/contact.component';
+import { LoginComponent } from '../login/login.component';
+import { ProductDetailsComponent } from '../product-details/product-details.component';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +19,7 @@ export class HeaderComponent implements OnInit {
   terminoBusqueda: string = '';
   isAdmin = false;
   isLogged = false;
-  constructor(private router: Router, private tokenServ: TokenService, private ropaServ: RopaService, private products: ProductsComponent) {}
+  constructor(private router: Router, private tokenServ: TokenService, private products: ProductsComponent, private searchResults: SearchResultsComponent, private contact: ContactComponent, private login: LoginComponent, private productDetails: ProductDetailsComponent) {}
 
   ngOnInit(): void {
     if(this.tokenServ.getToken()) {
@@ -26,15 +30,73 @@ export class HeaderComponent implements OnInit {
       this.isAdmin = false;
     }
 
-    let productosBtn = document.querySelector("#productos");
-    productosBtn?.addEventListener("click", ()=> {
-      this.cargarRopa();
+    // let productosBtn = document.querySelector("#productos");
+    // productosBtn?.addEventListener("click", ()=> {
+    //   this.cargarRopa();
+    // })
+
+    let brightBtn = document.querySelector("#bright-theme-btn");
+    let darkBtn = document.querySelector("#dark-theme-btn");
+    let brightBtnMblVw = document.querySelector("#bright-theme-btn-mblvw");
+    let darkBtnMblVw = document.querySelector("#dark-theme-btn-mblvw");
+
+    brightBtn?.addEventListener("click", ()=> {
+      localStorage.setItem('theme', 'bright');
+      this.products.brightTheme = true;
+      this.searchResults.brightTheme = true;
+      this.contact.brightTheme = true;
+      this.login.brightTheme = true;
+      this.productDetails.brightTheme = true;
+      this.products.darkTheme = false;
+      this.searchResults.darkTheme = false;
+      this.contact.darkTheme = false;
+      this.login.darkTheme = false;
+      this.productDetails.darkTheme = false;
+    })
+    brightBtnMblVw?.addEventListener("click", ()=> {
+      localStorage.setItem('theme', 'bright');
+      this.products.brightTheme = true;
+      this.searchResults.brightTheme = true;
+      this.contact.brightTheme = true;
+      this.login.brightTheme = true;
+      this.productDetails.brightTheme = true;
+      this.products.darkTheme = false;
+      this.searchResults.darkTheme = false;
+      this.contact.darkTheme = false;
+      this.login.darkTheme = false;
+      this.productDetails.darkTheme = false;
+    })
+    darkBtn?.addEventListener("click", ()=> {
+      localStorage.setItem('theme', 'dark');
+      this.products.darkTheme = true;
+      this.searchResults.darkTheme = true;
+      this.contact.darkTheme = true;
+      this.login.darkTheme = true;
+      this.productDetails.darkTheme = true;
+      this.products.brightTheme = false;
+      this.searchResults.brightTheme = false;
+      this.contact.brightTheme = false;
+      this.login.brightTheme = false;
+      this.productDetails.brightTheme = false;
+    })
+    darkBtnMblVw?.addEventListener("click", ()=> {
+      localStorage.setItem('theme', 'dark');
+      this.products.darkTheme = true;
+      this.searchResults.darkTheme = true;
+      this.contact.darkTheme = true;
+      this.login.darkTheme = true;
+      this.productDetails.darkTheme = true;
+      this.products.brightTheme = false;
+      this.searchResults.brightTheme = false;
+      this.contact.brightTheme = false;
+      this.login.brightTheme = false;
+      this.productDetails.brightTheme = false;
     })
   }
 
-  cargarRopa(): void {
-    this.ropaServ.lista().subscribe(data => {this.products.products = data});
-  }
+  // cargarRopa(): void {
+  //   this.ropaServ.lista().subscribe(data => {this.products.products = data});
+  // }
 
   buscar() {
     this.router.navigate(['/search', this.terminoBusqueda]);

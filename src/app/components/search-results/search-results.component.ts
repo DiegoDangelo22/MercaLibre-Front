@@ -27,8 +27,10 @@ export class SearchResultsComponent implements OnInit, OnChanges {
   isLogged = false;
   isAdmin = false;
   terminoBusqueda: string = this.router.url.substr(8);
+  brightTheme!: boolean;
+  darkTheme!: boolean;
   
-  constructor(private ropaService: RopaService, public header: HeaderComponent, public router: Router, public actRoute: ActivatedRoute, public tokenServ: TokenService, public categoriaService: CategoriaService, public colorService: ColorService, public talleService: TalleService) {
+  constructor(private ropaService: RopaService, public router: Router, public actRoute: ActivatedRoute, public tokenServ: TokenService, public categoriaService: CategoriaService, public colorService: ColorService, public talleService: TalleService) {
     this.actRoute.params.subscribe(params => {
       const termino = params['termino'];
       this.ropaService.buscarRopa(termino).subscribe(data => {
@@ -38,6 +40,13 @@ export class SearchResultsComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    if(localStorage.getItem('theme') === "bright") {
+      this.brightTheme = true;
+      this.darkTheme = false;
+    } else if(localStorage.getItem('theme') === "dark") {
+      this.darkTheme = true;
+      this.brightTheme = false;
+    }
      this.buscar();
 
      if(this.tokenServ.getToken()) {
@@ -81,9 +90,9 @@ export class SearchResultsComponent implements OnInit, OnChanges {
     })
   }
 
-  cargarRopa(): void {
-    this.ropaService.lista().subscribe(data => {this.resultados = data});
-  }
+  // cargarRopa(): void {
+  //   this.ropaService.lista().subscribe(data => {this.resultados = data});
+  // }
 
   cargarCategoria(): void {
     this.categoriaService.lista().subscribe(data => {this.categorias = data});
@@ -121,15 +130,15 @@ export class SearchResultsComponent implements OnInit, OnChanges {
     })
   }
 
-  deleteRopa(id: number): void {
-    if(id != undefined) {
-      this.ropaService.delete(id).subscribe({next: ()=> {
-        this.cargarRopa();
-      }, complete: ()=> {
-        console.log("Eliminación correcta");
-      }})
-    }
-  }
+  // deleteRopa(id: number): void {
+  //   if(id != undefined) {
+  //     this.ropaService.delete(id).subscribe({next: ()=> {
+  //       this.cargarRopa();
+  //     }, complete: ()=> {
+  //       console.log("Eliminación correcta");
+  //     }})
+  //   }
+  // }
 
   deleteCategoria(id: number): void {
     if(id != undefined) {
@@ -153,16 +162,16 @@ export class SearchResultsComponent implements OnInit, OnChanges {
     }
   }
 
-  deleteTalle(id: number): void {
-    if(id != undefined) {
-      this.talleService.delete(id).subscribe({next: ()=> {
-        this.cargarTalle();
-        this.cargarRopa();
-      }, complete: ()=> {
-        console.log("Talle eliminado")
-      }, error: ()=> {
-        console.log("Error al eliminar el talle")
-      }})
-    }
-  }
+  // deleteTalle(id: number): void {
+  //   if(id != undefined) {
+  //     this.talleService.delete(id).subscribe({next: ()=> {
+  //       this.cargarTalle();
+  //       this.cargarRopa();
+  //     }, complete: ()=> {
+  //       console.log("Talle eliminado")
+  //     }, error: ()=> {
+  //       console.log("Error al eliminar el talle")
+  //     }})
+  //   }
+  // }
 }

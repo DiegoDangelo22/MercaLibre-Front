@@ -7,6 +7,20 @@
                         <input type="text" class="search-bar" placeholder="Buscar productos" name="terminoBusqueda" [(ngModel)]="terminoBusqueda">
                         <button type="submit" class="search-btn"><i class="fa-solid fa-magnifying-glass magnifying-glass"></i></button>
                     </form>
+                    <div class="visual-theme-container">
+                        <button class="login-btn" id="bright-theme-btn"><i class="fa-solid fa-sun"></i></button>
+                        <button class="login-btn" id="dark-theme-btn"><i class="fa-solid fa-moon"></i></button>
+                    </div>
+                    <div class="login-btn-container">
+                        <button (click)="logOut()" *ngIf="isLogged" class="login-btn"><i class="fa-solid fa-right-to-bracket"></i></button>
+                        <button routerLink="/login" *ngIf="!isLogged" class="login-btn"><i class="fa-solid fa-right-to-bracket"></i></button>
+                    </div>
+                </div>
+                <div class="mobile-view-container">
+                    <div class="visual-theme-container">
+                        <button class="login-btn" id="bright-theme-btn-mblvw"><i class="fa-solid fa-sun"></i></button>
+                        <button class="login-btn" id="dark-theme-btn-mblvw"><i class="fa-solid fa-moon"></i></button>
+                    </div>
                     <div class="login-btn-container">
                         <button (click)="logOut()" *ngIf="isLogged" class="login-btn"><i class="fa-solid fa-right-to-bracket"></i></button>
                         <button routerLink="/login" *ngIf="!isLogged" class="login-btn"><i class="fa-solid fa-right-to-bracket"></i></button>
