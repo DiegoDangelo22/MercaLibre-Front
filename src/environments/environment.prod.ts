@@ -9,5 +9,5 @@ export const environment = {
         measurementId: "G-TNLHR5W3EY"
       },
     production: true,
-    URL: ''
+    URL: 'https://mercalibre-back.onrender.com/'
 }
