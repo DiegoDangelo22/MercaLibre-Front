@@ -190,7 +190,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
         nombre: url,
         color: {id: Number(this.colorSeleccionado)} as Color,
         ropas: {id: this.ropaId} as Ropa,
-        talle: {id: this.talleSeleccionado} as Talle
+        talle: {id: Number(this.talleSeleccionado)} as Talle
       };
     
       // Finalmente, creas un objeto de tipo Ropa con la información del formulario y el objeto imagenColor que acabas de crear
@@ -205,6 +205,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     
       // Guardas la ropa en el servidor
       this.ropaService.save(ropa).subscribe({next: data => {
+        console.log(ropa)
         console.log("Ropa guardada correctamente");
         this.cargarRopa2();
         let modal: any = document.querySelector("#create-product-modal");
