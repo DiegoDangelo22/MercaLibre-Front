@@ -257,6 +257,42 @@ button:hover {
     font-size: 30px;
     width: 32px;
 }
+.modal-container {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background: #000000c2;
+}
+.div-modal {
+    display: flex;
+    flex-direction: column;
+    background: #000;
+}
+#delete-warning-modal {
+    color: #fff;
+    padding: 30%;
+    box-sizing: border-box;
+    background: transparent;
+}
+#delete-warning-modal > .div-modal {
+    height: fit-content;
+}
+#delete-warning-modal > .div-modal > h4 {
+    padding: 20px 20px 0 20px;
+    text-align: center;
+}
+.delete-warning-modal-buttons {
+    display: flex;
+    gap: 10px;
+    margin: 20px auto;
+}
+.delete-warning-modal-buttons > button {
+    height: 30px;
+}
 
 @media screen and (max-width: 820px) {
     .title {

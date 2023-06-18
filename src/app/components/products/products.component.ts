@@ -42,6 +42,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   pageSize: number = 10;
   brightTheme!: boolean;
   darkTheme!: boolean;
+  warningText: string = "";
 
   constructor(private ropaService: RopaService, private categoriaService: CategoriaService, private colorService: ColorService, public talleService: TalleService, public imgServ: ImageService, public activatedRoute: ActivatedRoute, public http: HttpClient, private tokenServ: TokenService) {}
 
@@ -80,7 +81,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       container.style.display = 'none';
     }
     
-    window.addEventListener('scroll', this.onScroll.bind(this)); 
+    window.addEventListener('scroll', this.onScroll.bind(this));
   }
 
   @ViewChild('addProductBtn', {static: true}) addProductBtn!: ElementRef;
@@ -309,40 +310,96 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     }
   }
 
+  @ViewChild('warningYes', {static: true}) warningYes!: ElementRef;
+  @ViewChild('warningNo', {static: true}) warningNo!: ElementRef;
   deleteCategoria(id: number): void {
-    if(id != undefined) {
-      this.categoriaService.delete(id).subscribe({next: ()=> {
-        this.cargarCategoria();
-        this.cargarRopa2();
-      }, complete: ()=> {
-        console.log("Categoría eliminada")
-      }})
-    }
+    this.warningText = "Esta acción eliminará la categoría y los productos asociados.";
+    let modal:any = document.querySelector("#delete-warning-modal");
+    modal.style.display = "flex";
+    
+    const promise = new Promise<void>((resolve, reject)=> {
+      this.warningYes.nativeElement.addEventListener("click", ()=> {
+        resolve();
+      })
+      this.warningNo.nativeElement.addEventListener("click", ()=> {
+        reject();
+      })
+    })
+    promise.then(()=> {
+      if(id != undefined) {
+        this.categoriaService.delete(id).subscribe({next: ()=> {
+          this.cargarCategoria();
+          this.cargarRopa2();
+        }, complete: ()=> {
+          console.log("Categoría eliminada")
+          modal.style.display = "none";
+        }})
+      }
+    }).catch(()=> {
+      console.log("Modal de eliminación de categoría cerrado");
+      modal.style.display = "none";
+    })
   }
 
   deleteColor(id: number): void {
-    if(id != undefined) {
-      this.colorService.delete(id).subscribe({next: ()=> {
-        this.cargarColor();
-        this.cargarRopa2();
-      }, complete: ()=> {
-        console.log("Color eliminado")
-      }, error: ()=> {
-        console.log("Error al eliminar el color")
-      }})
-    }
+    this.warningText = "Esta acción eliminará el color y las imagenes que pertenezcan al mismo, de los productos que lo utilicen.";
+    let modal:any = document.querySelector("#delete-warning-modal");
+    modal.style.display = "flex";
+    
+    const promise = new Promise<void>((resolve, reject)=> {
+      this.warningYes.nativeElement.addEventListener("click", ()=> {
+        resolve();
+      })
+      this.warningNo.nativeElement.addEventListener("click", ()=> {
+        reject();
+      })
+    })
+    promise.then(()=> {
+      if(id != undefined) {
+        this.colorService.delete(id).subscribe({next: ()=> {
+          this.cargarColor();
+          this.cargarRopa2();
+        }, complete: ()=> {
+          console.log("Color eliminado")
+          modal.style.display = "none";
+        }, error: ()=> {
+          console.log("Error al eliminar el color")
+        }})
+      }
+    }).catch(()=> {
+      console.log("Modal de eliminación de color cerrado");
+      modal.style.display = "none";
+    })
   }
 
   deleteTalle(id: number): void {
-    if(id != undefined) {
-      this.talleService.delete(id).subscribe({next: ()=> {
-        this.cargarTalle();
-        this.cargarRopa2();
-      }, complete: ()=> {
-        console.log("Talle eliminado")
-      }, error: ()=> {
-        console.log("Error al eliminar el talle")
-      }})
-    }
+    this.warningText = "Esta acción eliminará el talle de los productos que lo utilicen.";
+    let modal:any = document.querySelector("#delete-warning-modal");
+    modal.style.display = "flex";
+    
+    const promise = new Promise<void>((resolve, reject)=> {
+      this.warningYes.nativeElement.addEventListener("click", ()=> {
+        resolve();
+      })
+      this.warningNo.nativeElement.addEventListener("click", ()=> {
+        reject();
+      })
+    })
+    promise.then(()=> {
+      if(id != undefined) {
+        this.talleService.delete(id).subscribe({next: ()=> {
+          this.cargarTalle();
+          this.cargarRopa2();
+        }, complete: ()=> {
+          console.log("Talle eliminado")
+          modal.style.display = "none";
+        }, error: ()=> {
+          console.log("Error al eliminar el talle")
+        }})
+      }
+    }).catch(()=> {
+      console.log("Modal de eliminación de talle cerrado");
+      modal.style.display = "none";
+    })
   }
 }

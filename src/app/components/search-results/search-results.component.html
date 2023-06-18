@@ -26,7 +26,7 @@
         <h4 id="talle-text">TALLE</h4>
         <ul *ngFor="let talle of talles" (click)="filtrarRopaPorTalle(talle.id!)" [ngClass]="{'user-styles':!isAdmin, 'admin-styles':isAdmin}">
             <li class="cursor talle-nombre">{{talle.talle}}</li>
-            <!-- <button class="delete-btn" (click)="deleteTalle(talle.id!)" *ngIf="isAdmin"><i class="fa-solid fa-circle-xmark"></i></button> -->
+            <button class="delete-btn" (click)="deleteTalle(talle.id!)" *ngIf="isAdmin"><i class="fa-solid fa-circle-xmark"></i></button>
         </ul>
         <h4 id="price-filter-text">PRECIO</h4>
         <div class="price-filter-container">
@@ -54,10 +54,19 @@
                     <h4>${{product.precio}}</h4>
                 </div>
                 <div class="crud-btn" *ngIf="isAdmin">
-                    <!-- <button (click)="deleteRopa(product.id!)">Eliminar</button> -->
+                    <button (click)="deleteRopa(product.id!)">Eliminar</button>
                 </div>
           </div>
       </div>
+    </div>
+    <div class="modal-container" id="delete-warning-modal">
+        <div class="div-modal">
+            <h4>{{warningText}}</h4>
+            <div class="delete-warning-modal-buttons">
+                <button #warningYes>Aceptar</button>
+                <button #warningNo>Cerrar</button>
+            </div>
+        </div>
     </div>
 </body>
 <app-footer></app-footer>

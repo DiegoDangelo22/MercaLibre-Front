@@ -315,6 +315,27 @@ input, select {
     border: 1px solid #fff;
     padding: 0;
 }
+#delete-warning-modal {
+    color: #fff;
+    padding: 30%;
+    box-sizing: border-box;
+    background: transparent;
+}
+#delete-warning-modal > .div-modal {
+    height: fit-content;
+}
+#delete-warning-modal > .div-modal > h4 {
+    padding: 20px 20px 0 20px;
+    text-align: center;
+}
+.delete-warning-modal-buttons {
+    display: flex;
+    gap: 10px;
+    margin: 20px auto;
+}
+.delete-warning-modal-buttons > button {
+    height: 30px;
+}
 
 /* MOBILE VIEW */
 .filters-container {
@@ -464,6 +485,12 @@ input, select {
     }
     #talle-add-btn {
         margin: 10px;
+    }
+    #delete-warning-modal {
+        padding: 0;
+    }
+    #delete-warning-modal > .div-modal {
+        margin: auto;
     }
 }
 

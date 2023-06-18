@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Ropa } from 'src/app/model/ropa';
 import { RopaService } from 'src/app/services/ropa.service';
@@ -11,6 +11,7 @@ import { CategoriaService } from 'src/app/services/categoria.service';
 import { ColorService } from 'src/app/services/color.service';
 import { TalleService } from 'src/app/services/talle.service';
 import { Talle } from 'src/app/model/talle';
+import { ProductsComponent } from '../products/products.component';
 
 @Component({
   selector: 'app-search-results',
@@ -26,11 +27,14 @@ export class SearchResultsComponent implements OnInit, OnChanges {
   maxPrice!: number;
   isLogged = false;
   isAdmin = false;
+  currentPage: number = 0;
+  pageSize: number = 10;
   terminoBusqueda: string = this.router.url.substr(8);
   brightTheme!: boolean;
   darkTheme!: boolean;
+  warningText: string = "";
   
-  constructor(private ropaService: RopaService, public router: Router, public actRoute: ActivatedRoute, public tokenServ: TokenService, public categoriaService: CategoriaService, public colorService: ColorService, public talleService: TalleService) {
+  constructor(private ropaService: RopaService, public router: Router, public actRoute: ActivatedRoute, public tokenServ: TokenService, public categoriaService: CategoriaService, public colorService: ColorService, public talleService: TalleService, public products: ProductsComponent) {
     this.actRoute.params.subscribe(params => {
       const termino = params['termino'];
       this.ropaService.buscarRopa(termino).subscribe(data => {
@@ -57,6 +61,8 @@ export class SearchResultsComponent implements OnInit, OnChanges {
       this.isAdmin = false;
     }
 
+    this.cargarRopa2();
+
     this.categoriaService.lista().subscribe(data => {
       this.categorias = data;
     })
@@ -68,6 +74,7 @@ export class SearchResultsComponent implements OnInit, OnChanges {
     this.talleService.lista().subscribe(data => {
       this.talles = data;
     })
+    window.addEventListener('scroll', this.onScroll.bind(this)); 
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -77,22 +84,12 @@ export class SearchResultsComponent implements OnInit, OnChanges {
   buscar() {
     this.ropaService.buscarRopas(this.terminoBusqueda).subscribe(data => {
       if (this.terminoBusqueda) {
-        // console.log(this.terminoBusqueda)
         this.ropaService.buscarRopa(this.terminoBusqueda).subscribe(data => {
           this.resultados = data;
-          // console.log(this.resultados)
-          // for (let i = 0; i < this.resultados.length; i++) {
-          //   this.colores.push(this.resultados[i].colores[0] as unknown as Color);
-          // }
-          // console.log(this.colores)
-        }
-      )}
+        })
+      }
     })
   }
-
-  // cargarRopa(): void {
-  //   this.ropaService.lista().subscribe(data => {this.resultados = data});
-  // }
 
   cargarCategoria(): void {
     this.categoriaService.lista().subscribe(data => {this.categorias = data});
@@ -130,48 +127,132 @@ export class SearchResultsComponent implements OnInit, OnChanges {
     })
   }
 
-  // deleteRopa(id: number): void {
-  //   if(id != undefined) {
-  //     this.ropaService.delete(id).subscribe({next: ()=> {
-  //       this.cargarRopa();
-  //     }, complete: ()=> {
-  //       console.log("Eliminación correcta");
-  //     }})
-  //   }
-  // }
+  onScroll(): void {
+    const windowHeight = 'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight;
+    const body = document.body;
+    const html = document.documentElement;
+    const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+    const windowBottom = windowHeight + window.pageYOffset;
+  
+    if (windowBottom >= docHeight) {
+      this.cargarRopa();
+    }
+  }
 
-  deleteCategoria(id: number): void {
+  cargarRopa(): void {
+    this.currentPage++;
+    this.ropaService.lista(this.currentPage, this.pageSize).subscribe((data:any) => {
+      data.content.forEach((e:any) => {
+        this.resultados.push(e)
+      })});
+  }
+
+  cargarRopa2(): void {
+    this.ropaService.lista(this.currentPage, this.pageSize).subscribe((data:any) => {
+      this.resultados = data.content;
+    })
+  }
+
+  deleteRopa(id: number): void {
     if(id != undefined) {
-      this.categoriaService.delete(id).subscribe({next: ()=> {
-        this.cargarCategoria();
+      this.ropaService.delete(id).subscribe({next: ()=> {
+        this.cargarRopa2();
       }, complete: ()=> {
-        console.log("Categoría eliminada")
+        console.log("Producto eliminado");
       }})
     }
+  }
+
+  @ViewChild('warningYes', {static: true}) warningYes!: ElementRef;
+  @ViewChild('warningNo', {static: true}) warningNo!: ElementRef;
+  deleteCategoria(id: number): void {
+    this.warningText = "Esta acción eliminará la categoría y los productos asociados.";
+    let modal:any = document.querySelector("#delete-warning-modal");
+    modal.style.display = "flex";
+    
+    const promise = new Promise<void>((resolve, reject)=> {
+      this.warningYes.nativeElement.addEventListener("click", ()=> {
+        resolve();
+      })
+      this.warningNo.nativeElement.addEventListener("click", ()=> {
+        reject();
+      })
+    })
+    promise.then(()=> {
+      if(id != undefined) {
+        this.categoriaService.delete(id).subscribe({next: ()=> {
+          this.cargarCategoria();
+          this.cargarRopa2();
+        }, complete: ()=> {
+          console.log("Categoría eliminada")
+          modal.style.display = "none";
+        }})
+      }
+    }).catch(()=> {
+      console.log("Modal de eliminación de categoría cerrado");
+      modal.style.display = "none";
+    })
   }
 
   deleteColor(id: number): void {
-    if(id != undefined) {
-      this.colorService.delete(id).subscribe({next: ()=> {
-        this.cargarColor();
-      }, complete: ()=> {
-        console.log("Color eliminado")
-      }, error: ()=> {
-        console.log("Error al eliminar el color")
-      }})
-    }
+    this.warningText = "Esta acción eliminará el color y las imagenes que pertenezcan al mismo, de los productos que lo utilicen.";
+    let modal:any = document.querySelector("#delete-warning-modal");
+    modal.style.display = "flex";
+    
+    const promise = new Promise<void>((resolve, reject)=> {
+      this.warningYes.nativeElement.addEventListener("click", ()=> {
+        resolve();
+      })
+      this.warningNo.nativeElement.addEventListener("click", ()=> {
+        reject();
+      })
+    })
+    promise.then(()=> {
+      if(id != undefined) {
+        this.colorService.delete(id).subscribe({next: ()=> {
+          this.cargarColor();
+          this.cargarRopa2();
+        }, complete: ()=> {
+          console.log("Color eliminado")
+          modal.style.display = "none";
+        }, error: ()=> {
+          console.log("Error al eliminar el color")
+        }})
+      }
+    }).catch(()=> {
+      console.log("Modal de eliminación de color cerrado");
+      modal.style.display = "none";
+    })
   }
 
-  // deleteTalle(id: number): void {
-  //   if(id != undefined) {
-  //     this.talleService.delete(id).subscribe({next: ()=> {
-  //       this.cargarTalle();
-  //       this.cargarRopa();
-  //     }, complete: ()=> {
-  //       console.log("Talle eliminado")
-  //     }, error: ()=> {
-  //       console.log("Error al eliminar el talle")
-  //     }})
-  //   }
-  // }
+  deleteTalle(id:number): void {
+    this.warningText = "Esta acción eliminará el talle de los productos que lo utilicen.";
+    let modal:any = document.querySelector("#delete-warning-modal");
+    modal.style.display = "flex";
+    
+    const promise = new Promise<void>((resolve, reject)=> {
+      this.warningYes.nativeElement.addEventListener("click", ()=> {
+        resolve();
+      })
+      this.warningNo.nativeElement.addEventListener("click", ()=> {
+        reject();
+      })
+    })
+    promise.then(()=> {
+      if(id != undefined) {
+        this.talleService.delete(id).subscribe({next: ()=> {
+          this.cargarTalle();
+          this.cargarRopa2();
+        }, complete: ()=> {
+          console.log("Talle eliminado")
+          modal.style.display = "none";
+        }, error: ()=> {
+          console.log("Error al eliminar el talle")
+        }})
+      }
+    }).catch(()=> {
+      console.log("Modal de eliminación de talle cerrado");
+      modal.style.display = "none";
+    })
+  }
 }
