@@ -338,11 +338,10 @@ button:hover {
     letter-spacing: 2px;
     font-size: 18px;
     display: flex;
-    justify-content: center;
     overflow-wrap: unset;
+    width: 80px;
 }
 .user-styles > li > p {
-    width: 80px;
     text-align: start;
 }
 .admin-styles {

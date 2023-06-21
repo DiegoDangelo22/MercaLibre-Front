@@ -336,6 +336,9 @@ input, select {
 .delete-warning-modal-buttons > button {
     height: 30px;
 }
+.hovered {
+    border: 2px dashed #333;
+}
 
 /* MOBILE VIEW */
 .filters-container {
@@ -520,11 +523,10 @@ input, select {
     letter-spacing: 2px;
     font-size: 18px;
     display: flex;
-    justify-content: center;
     overflow-wrap: unset;
+    width: 80px;
 }
 .user-styles > li > p {
-    width: 80px;
     text-align: start;
 }
 .admin-styles {

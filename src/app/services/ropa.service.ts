@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { Ropa } from '../model/ropa';
 import { ImagenColor } from '../model/imagen-color';
 import { ObjectMapper } from 'json-object-mapper';
+import { UpdateOrden } from '../model/update-orden';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,10 @@ export class RopaService {
   
   constructor(private httpClient: HttpClient) { }
   
+  updateOrden(updateOrden: UpdateOrden): Observable<any> {
+    return this.httpClient.put(`${this.URL}update-orden`, updateOrden);
+  }
+
   agregarColor(id: number, imagenColor: ImagenColor): Observable<any> {
     return this.httpClient.put(`${this.URL}${id}/imagen-color`, imagenColor);
   }

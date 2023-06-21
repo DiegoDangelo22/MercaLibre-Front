@@ -6,6 +6,7 @@ import { Color } from 'src/app/model/color';
 import { ImagenColor } from 'src/app/model/imagen-color';
 import { Ropa } from 'src/app/model/ropa';
 import { Talle } from 'src/app/model/talle';
+import { UpdateOrden } from 'src/app/model/update-orden';
 import { CategoriaService } from 'src/app/services/categoria.service';
 import { ColorService } from 'src/app/services/color.service';
 import { ImageService } from 'src/app/services/image.service';
@@ -147,6 +148,45 @@ export class ProductsComponent implements OnInit, AfterViewInit {
           }, 10);
       }
     })
+
+    setTimeout(() => {
+      let products = document.querySelectorAll('.products');
+        products.forEach((p:any) => {
+          p.addEventListener("dragstart", (e:DragEvent)=> {
+            e.dataTransfer?.setData("text/plain", p.dataset['orden']);
+            console.log(p.dataset['orden'])
+          })
+          p.addEventListener("dragover", (e:any)=> {
+            e.preventDefault();
+            p.classList.add("hovered");
+          });
+          p.addEventListener("dragleave", ()=> {
+            p.classList.remove("hovered");
+          });
+          p.addEventListener("drop", (e:any)=> {
+            e.preventDefault()
+            p.classList.remove("hovered");
+            const draggedOrden = parseInt(e.dataTransfer.getData("text/plain"), 10);
+            const targetOrden = parseInt(p.dataset['orden'], 10);
+        
+            if (draggedOrden !== targetOrden) {
+              const draggedProduct:any = document.querySelector(`[data-orden="${draggedOrden}"]`);
+              this.swapNode(draggedProduct, p);
+              let updateOrden = new UpdateOrden(draggedOrden, targetOrden);
+              this.ropaService.updateOrden(updateOrden).subscribe(()=> {
+                console.log("Drag & drop!")
+              })
+          }
+      })});
+    }, 3000);
+  }
+
+  swapNode(node1: any, node2: any) {
+    const parent1 = node1.parentNode;
+    const sibling1 = node1.nextSibling === node2 ? node1 : node1.nextSibling;
+  
+    node2.parentNode.insertBefore(node1, node2);
+    parent1.insertBefore(node2, sibling1);
   }
 
   filtrarRopaPorCategoria(id: number) {

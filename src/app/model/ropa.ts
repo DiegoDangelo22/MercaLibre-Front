@@ -10,6 +10,7 @@ export class Ropa {
     colores: Color[];
     precio: number;
     categoria: Categoria;
+    orden?: number;
 
     constructor(nombre: string, descripcion: string, imagenesColor: ImagenColor[], colores: Color[], precio: number, categoria: Categoria) {
         this.nombre = nombre;

@@ -96,7 +96,7 @@
     <button class="price-filter-btn" (click)="searchProductsByPriceRange()"><i class="fa-solid fa-magnifying-glass-dollar"></i></button>
 </div>
 <div class="products-container">
-      <div class="products" *ngFor="let product of products">
+      <div class="products" *ngFor="let product of products" [attr.data-orden]="product.orden" draggable="true">
             <div class="product-img" routerLink="/details/{{product.id}}">
                 <div class="layout"></div>
                 <img [src]="getImagenRopaNombre(products, product.id!)" width="150px">
