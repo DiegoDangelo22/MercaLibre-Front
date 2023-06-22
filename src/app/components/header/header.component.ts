@@ -1,8 +1,5 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Ropa } from 'src/app/model/ropa';
-import { RopaService } from 'src/app/services/ropa.service';
-import { AuthService } from 'src/app/services/security/auth.service';
 import { TokenService } from 'src/app/services/security/token.service';
 import { ProductsComponent } from '../products/products.component';
 import { SearchResultsComponent } from '../search-results/search-results.component';
@@ -29,11 +26,6 @@ export class HeaderComponent implements OnInit {
       this.isLogged = false;
       this.isAdmin = false;
     }
-
-    // let productosBtn = document.querySelector("#productos");
-    // productosBtn?.addEventListener("click", ()=> {
-    //   this.cargarRopa();
-    // })
 
     let brightBtn = document.querySelector("#bright-theme-btn");
     let darkBtn = document.querySelector("#dark-theme-btn");
@@ -93,10 +85,6 @@ export class HeaderComponent implements OnInit {
       this.productDetails.brightTheme = false;
     })
   }
-
-  // cargarRopa(): void {
-  //   this.ropaServ.lista().subscribe(data => {this.products.products = data});
-  // }
 
   buscar() {
     this.router.navigate(['/search', this.terminoBusqueda]);

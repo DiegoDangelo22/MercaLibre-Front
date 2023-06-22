@@ -149,7 +149,8 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       }
     })
 
-    setTimeout(() => {
+    if(this.isAdmin) {
+      setTimeout(() => {
       let products = document.querySelectorAll('.products');
         products.forEach((p:any) => {
           p.addEventListener("dragstart", (e:DragEvent)=> {
@@ -179,6 +180,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
           }
       })});
     }, 3000);
+    }
   }
 
   swapNode(node1: any, node2: any) {

@@ -1,9 +1,7 @@
-import { Component, ElementRef, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Ropa } from 'src/app/model/ropa';
 import { RopaService } from 'src/app/services/ropa.service';
-import { environment } from 'src/environments/environment';
-import { HeaderComponent } from '../header/header.component';
 import { Color } from 'src/app/model/color';
 import { TokenService } from 'src/app/services/security/token.service';
 import { Categoria } from 'src/app/model/categoria';
@@ -18,7 +16,7 @@ import { ProductsComponent } from '../products/products.component';
   templateUrl: './search-results.component.html',
   styleUrls: ['./search-results.component.css']
 })
-export class SearchResultsComponent implements OnInit, OnChanges {
+export class SearchResultsComponent implements OnInit {
   resultados: Ropa[] = [];
   categorias: Categoria[] = [];
   colores: Color[] = [];
@@ -29,7 +27,6 @@ export class SearchResultsComponent implements OnInit, OnChanges {
   isAdmin = false;
   currentPage: number = 0;
   pageSize: number = 10;
-  terminoBusqueda: string = this.router.url.substr(8);
   brightTheme!: boolean;
   darkTheme!: boolean;
   warningText: string = "";
@@ -51,7 +48,6 @@ export class SearchResultsComponent implements OnInit, OnChanges {
       this.darkTheme = true;
       this.brightTheme = false;
     }
-     this.buscar();
 
      if(this.tokenServ.getToken()) {
       this.isLogged = true;
@@ -60,8 +56,6 @@ export class SearchResultsComponent implements OnInit, OnChanges {
       this.isLogged = false;
       this.isAdmin = false;
     }
-
-    this.cargarRopa2();
 
     this.categoriaService.lista().subscribe(data => {
       this.categorias = data;
@@ -77,18 +71,8 @@ export class SearchResultsComponent implements OnInit, OnChanges {
     window.addEventListener('scroll', this.onScroll.bind(this)); 
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    this.buscar();
-  }
-  
-  buscar() {
-    this.ropaService.buscarRopas(this.terminoBusqueda).subscribe(data => {
-      if (this.terminoBusqueda) {
-        this.ropaService.buscarRopa(this.terminoBusqueda).subscribe(data => {
-          this.resultados = data;
-        })
-      }
-    })
+  navigateToProductDetails(id: Ropa) {
+    this.router.navigate(['/details', id]);
   }
 
   cargarCategoria(): void {
@@ -153,9 +137,10 @@ export class SearchResultsComponent implements OnInit, OnChanges {
     })
   }
 
-  deleteRopa(id: number): void {
+  deleteRopa(id: Ropa): void {
+    let ropaId:any = id;
     if(id != undefined) {
-      this.ropaService.delete(id).subscribe({next: ()=> {
+      this.ropaService.delete(ropaId).subscribe({next: ()=> {
         this.cargarRopa2();
       }, complete: ()=> {
         console.log("Producto eliminado");
