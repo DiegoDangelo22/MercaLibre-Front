@@ -339,6 +339,11 @@ input, select {
 .hovered {
     border: 2px dashed #333;
 }
+.loading-sign {
+    width: 100%;
+    text-align: center;
+    margin: 10% 10% 4% 10%;
+}
 
 /* MOBILE VIEW */
 .filters-container {

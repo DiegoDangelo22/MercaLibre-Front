@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Categoria } from 'src/app/model/categoria';
 import { Color } from 'src/app/model/color';
 import { ImagenColor } from 'src/app/model/imagen-color';
@@ -44,8 +44,10 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   brightTheme!: boolean;
   darkTheme!: boolean;
   warningText: string = "";
+  isLoading!: boolean;
+  ropaIsFiltered!: boolean;
 
-  constructor(private ropaService: RopaService, private categoriaService: CategoriaService, private colorService: ColorService, public talleService: TalleService, public imgServ: ImageService, public activatedRoute: ActivatedRoute, public http: HttpClient, private tokenServ: TokenService) {}
+  constructor(private ropaService: RopaService, private categoriaService: CategoriaService, private colorService: ColorService, public talleService: TalleService, public imgServ: ImageService, public activatedRoute: ActivatedRoute, public router: Router, public http: HttpClient, private tokenServ: TokenService) {}
 
   ngOnInit(): void {
     if(localStorage.getItem('theme') === "bright") {
@@ -193,24 +195,28 @@ export class ProductsComponent implements OnInit, AfterViewInit {
 
   filtrarRopaPorCategoria(id: number) {
     this.ropaService.filtrarRopaPorCategoria(id).subscribe(ropas => {
+      this.ropaIsFiltered = true;
       this.products = ropas;
     });
   }
 
   filtrarRopaPorColor(id: number) {
     this.ropaService.filtrarRopaPorColor(id).subscribe(ropas => {
+      this.ropaIsFiltered = true;
       this.products = ropas;
     });
   }
 
   filtrarRopaPorTalle(id: number) {
     this.ropaService.filtrarRopaPorTalle(id).subscribe(ropas => {
+      this.ropaIsFiltered = true;
       this.products = ropas;
     })
   }
 
   searchProductsByPriceRange(): void {
     this.ropaService.searchProductsByPriceRange(this.minPrice, this.maxPrice).subscribe(ropas => {
+      this.ropaIsFiltered = true;
       this.products = ropas;
     })
   }
@@ -312,16 +318,31 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     const windowBottom = windowHeight + window.pageYOffset;
   
     if (windowBottom >= docHeight) {
-      this.cargarRopa();
+      if(!this.ropaIsFiltered) {
+        if(this.isLoading) {
+          return;
+        }
+          this.cargarRopa();
+      }
     }
   }
 
   cargarRopa(): void {
-    this.currentPage++;
-    this.ropaService.lista(this.currentPage, this.pageSize).subscribe((data:any) => {
-      data.content.forEach((e:any) => {
-        this.products.push(e)
-      })});
+      this.currentPage++;
+      this.ropaService.lista(this.currentPage, this.pageSize).subscribe((data:any) => {
+        if(data.numberOfElements === 0) {
+          this.isLoading = false;
+        } else {
+          this.isLoading = true;
+        }
+          data.content.forEach((e:any) => {
+            setTimeout(() => {
+              this.products.push(e);
+              this.isLoading = false;
+            }, 3000);
+          })
+        }
+      );
   }
 
   cargarRopa2(): void {

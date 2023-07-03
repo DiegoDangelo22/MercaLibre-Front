@@ -110,6 +110,9 @@
                 <button (click)="deleteRopa(product.id!)">Eliminar</button>
             </div>
       </div>
+      <div class="loading-sign" *ngIf="isLoading">
+        <h4>Cargando más productos...</h4>
+      </div>
   </div>
 </div>
   <!-- MODALES -->
