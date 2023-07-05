@@ -132,6 +132,9 @@ input[type=number] {
     font-weight: 600;
     transition: 0.1s ease-out;
 }
+.talle-nombre {
+    justify-content: center;
+}
 .talle-nombre:hover {
     font-weight: 600;
     transition: 0.1s ease-out;
