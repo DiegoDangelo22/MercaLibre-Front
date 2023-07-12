@@ -33,6 +33,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   talleNombre: any;
   colorNombre: any;
   precio: number = 0;
+  stock: number = 1;
   categoriaSeleccionada: any;
   categoriaNombre: any;
   minPrice!: number;
@@ -239,7 +240,8 @@ export class ProductsComponent implements OnInit, AfterViewInit {
         nombre: url,
         color: {id: Number(this.colorSeleccionado)} as Color,
         ropas: {id: this.ropaId} as Ropa,
-        talle: {id: Number(this.talleSeleccionado)} as Talle
+        talle: {id: Number(this.talleSeleccionado)} as Talle,
+        stock: this.stock
       };
     
       // Finalmente, creas un objeto de tipo Ropa con la información del formulario y el objeto imagenColor que acabas de crear

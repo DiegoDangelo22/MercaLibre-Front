@@ -35,13 +35,19 @@
                 </ng-container>
             </ng-container>
         </div>
+        <div class="stock-container">
+            <span>Stock: </span>
+            <ng-container *ngFor="let img of imagenes">
+                <span>{{img.stock}}</span>
+            </ng-container>
+        </div>
         <div id="modal-container">
             <div id="add-image-color" [hidden]="!isAdmin">
                 <button #addColorBtn id="add-image-color-btn">Agregar imagen y color</button>
             </div>
-            <!-- <div>
-                <button>Agregar al carrito</button>
-            </div> -->
+            <div>
+                <button (click)="addProductToCart()">Agregar al carrito</button>
+            </div>
             <!-- <div>
                 <button>Agregar todas las variantes al carrito</button>
                 <button>Borrar todas las variantes del carrito</button>

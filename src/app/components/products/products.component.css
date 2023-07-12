@@ -263,6 +263,9 @@ button {
 button:hover {
     background: radial-gradient(#ffee93, #fd9b34);
 }
+#create-product-modal > .modal {
+    height: 80%;
+}
 .modal-container {
     display: none;
     position: fixed;
@@ -275,6 +278,7 @@ button:hover {
 }
 .modal {
     width: 80%;
+    overflow-y: auto;
     margin: auto;
     color: #fff;
     display: flex;

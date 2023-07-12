@@ -11,6 +11,8 @@ import { ImagenColorService } from 'src/app/services/imagen-color.service';
 import { RopaService } from 'src/app/services/ropa.service';
 import { TokenService } from 'src/app/services/security/token.service';
 import { TalleService } from 'src/app/services/talle.service';
+import { HeaderComponent } from '../header/header.component';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'app-product-details',
@@ -34,10 +36,13 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit {
   isAdmin = false;
   brightTheme!: boolean;
   darkTheme!: boolean;
+  i: number = 0;
+  arrayFiltered:any[] = []
 
-  constructor(private ropaService: RopaService, private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder, public imageService: ImageService, private tokenServ: TokenService, private colorServ: ColorService, private talleServ: TalleService) {}
+  constructor(private ropaService: RopaService, private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder, public imageService: ImageService, private tokenServ: TokenService, private colorServ: ColorService, private talleServ: TalleService) {  }
 
   ngOnInit(): void {
+    this.cargarProducto();
     if(localStorage.getItem('theme') === "bright") {
       this.brightTheme = true;
       this.darkTheme = false;
@@ -66,8 +71,6 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit {
     this.talleServ.lista().subscribe(data => {
       this.talles = data;
     })
-
-    this.cargarProducto();
   }
 
 @ViewChild('addColorBtn', {static: true}) addColorBtn!: ElementRef;
@@ -81,6 +84,85 @@ ngAfterViewInit(): void {
         }
       };
     });
+}
+
+addProductToCart() {
+    const id = this.activatedRoute.snapshot.params['id'];
+    this.ropaService.detail(id).subscribe(data => {
+      this.cargarProducto();
+      if(localStorage.getItem('cart-products')) {
+        let productsStringified: any = localStorage.getItem('cart-products');
+        let products = JSON.parse(productsStringified);
+        let productRepetido = products.find((e: any)=> e.img === this.imagenPorDefecto.nombre);
+        if(productRepetido) {
+            
+            let cantidadText:any = document.querySelectorAll(".cantidad");
+            let array:any[] = [];
+              
+            while (this.i<1) {
+              cantidadText.forEach((e:any) => {
+                array.push(e);
+                this.arrayFiltered = array.filter((e:any)=>e.textContent == `Cantidad: ${productRepetido.cantidad}` && e.parentNode.childNodes[1].innerHTML == data.nombre);
+              });
+              this.i++;
+            }
+            if(this.imagenPorDefecto.stock <= productRepetido.cantidad) {
+              return;
+            } else {
+              productRepetido.cantidad += 1;
+              this.arrayFiltered[0].textContent = `Cantidad: ${productRepetido.cantidad}`;
+            }
+            localStorage.setItem('cart-products', JSON.stringify(products));
+          } else {
+            if(this.imagenPorDefecto.stock==0) {
+              alert("No hay stock de esa variante");
+            } else {
+              let cart = document.querySelector('.cart-modal-product-list');
+              let container = document.createElement('div');
+              let img = document.createElement('img');
+              let p1 = document.createElement('p');
+              let p2 = document.createElement('p');
+              let p3 = document.createElement('p');
+              p3.classList.add('cantidad');
+              img.src = this.imagenPorDefecto.nombre;
+              img.style.width = '50px';
+              p1.append(data.nombre);
+              p2.append(`Precio: ${data.precio.toString()}`);
+              p3.append('Cantidad: 1');
+              container.appendChild(img);
+              container.appendChild(p1);
+              container.appendChild(p2);
+              container.appendChild(p3);
+              cart?.appendChild(container);
+              products.push({id: data.id, nombre: data.nombre, precio: data.precio, img: this.imagenPorDefecto.nombre, cantidad: 1})
+              localStorage.setItem('cart-products', JSON.stringify(products));
+            }
+          }
+      } else {
+        if(this.imagenPorDefecto.stock==0) {
+          alert("No hay stock de esa variante");
+        } else {
+          let cart = document.querySelector('.cart-modal-product-list');
+          let container = document.createElement('div');
+          let img = document.createElement('img');
+          let p1 = document.createElement('p');
+          let p2 = document.createElement('p');
+          let p3 = document.createElement('p');
+          p3.classList.add('cantidad');
+          img.src = this.imagenPorDefecto.nombre;
+          img.style.width = '50px';
+          p1.append(data.nombre);
+          p2.append(`Precio: ${data.precio.toString()}`);
+          p3.append('Cantidad: 1');
+          container.appendChild(img);
+          container.appendChild(p1);
+          container.appendChild(p2);
+          container.appendChild(p3);
+          cart?.appendChild(container);
+          localStorage.setItem('cart-products', JSON.stringify([{id: data.id, nombre: data.nombre, precio: data.precio, img: this.imagenPorDefecto.nombre, cantidad: 1}]));
+        }
+      }
+    })
 }
 
 cargarProducto() {
@@ -133,6 +215,7 @@ agregarColor() {
       }
       // console.log(this.imagenPorDefecto)
       this.imagenPorDefecto = this.imagenFiltrada[0];
+      
     })
   }
 
