@@ -76,6 +76,7 @@ h1, h2, h3, h4 {
 .price-filter-container > div > label {
     padding: 0;
     margin: 0;
+    font-size: 18px;
 }
 .price-filter-container > div > input {
     width: 100%;
