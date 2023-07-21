@@ -1,0 +1,42 @@
+body {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    background: #fff;
+}
+.payment-methods {
+    width: 60%;
+    height: 100%;
+    text-align: center;
+    overflow-y: auto;
+}
+.paypal-container {
+    width: 50%;
+    margin: 30px auto;
+    min-width: fit-content;
+}
+.purchase-details {
+    width: 40%;
+    height: 100%;
+    padding: 0 10px 10px 10px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+h4 {
+    color: #373434;
+    text-align: center;
+    padding: 30px 0 0 0;
+}
+a {
+    padding-bottom: 30px;
+}
+.purchase-details > div {
+    width: fit-content;
+    background: #373434;
+    color: #fff;
+    margin: 30px auto;
+    padding: 10px;
+    text-align: center;
+    border-radius: 10px;
+    overflow-wrap: anywhere;
+}

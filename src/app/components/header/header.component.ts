@@ -92,18 +92,36 @@ export class HeaderComponent implements OnInit {
     })
 
     let cartButton = document.querySelector("#cart-button");
-    let flechita:any = document.querySelector(".flechita");
-    let cartModal:any = document.querySelector(".cart-modal");
+    let cartButtonMblVw = document.querySelector("#cart-button-mblvw");
+    let flechita:any = document.querySelectorAll(".flechita");
+    let cartModal:any = document.querySelectorAll(".cart-modal");
 
     cartButton?.addEventListener("click", ()=> {
-      if(cartModal.style.display === "block") {
-        flechita.style.display = "none";
-        cartModal.style.display = "none";
+      if(cartModal[0].style.display === "flex") {
+        flechita[0].style.display = "none";
+        cartModal[0].style.display = "none";
       } else {
-        flechita.style.display = "block";
-        cartModal.style.display = "block";
+        flechita[0].style.display = "flex";
+        cartModal[0].style.display = "flex";
       }
     })
+    cartButtonMblVw?.addEventListener("click", ()=> {
+      if(cartModal[1].style.display === "flex") {
+        flechita[1].style.display = "none";
+        cartModal[1].style.display = "none";
+      } else {
+        flechita[1].style.display = "flex";
+        cartModal[1].style.display = "flex";
+      }
+    })
+  }
+
+  goToCheckout() {
+    if(this.cartProducts==null) {
+      alert("Primero agrega productos al carrito");
+    } else {
+      this.router.navigate(['/checkout'])
+    }
   }
 
   buscar() {

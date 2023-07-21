@@ -19,6 +19,7 @@
     "@angular/platform-browser": "^15.2.0",
     "@angular/platform-browser-dynamic": "^15.2.0",
     "@angular/router": "^15.2.0",
+    "@paypal/paypal-js": "^6.0.0",
     "firebase": "^9.18.0",
     "json-object-mapper": "^1.7.1",
     "rxjs": "~7.8.0",

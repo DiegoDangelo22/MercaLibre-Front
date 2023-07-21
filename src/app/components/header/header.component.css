@@ -74,9 +74,11 @@ form {
     height: 40px;
     background: linear-gradient(120deg, #f2dd6c, #ffcc4b);
     transform: translate(50%, -50%) rotate(45deg);
+    border: 2px solid;
 }
 .cart-modal {
     display: none;
+    flex-direction: column;
     width: 200px;
     height: 400px;
     position: absolute;
@@ -84,6 +86,7 @@ form {
     right: 30px;
     background: radial-gradient(#ffee93, #eab941);
     z-index: 1;
+    border: 2px solid;
     border-radius: 2%;
     box-shadow: 10px 6px 20px 0px rgba(0,0,0,0.18);
 }
@@ -91,6 +94,17 @@ form {
     text-align: center;
     margin: 10px auto;
     color: #000;
+}
+.cart-modal > button {
+    background: #000;
+    width: 100%;
+    border: 2px;
+    border-style: solid none none none;
+    border-radius: 0 0 4px 4px;
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 10px;
 }
 .cart-modal-product-list {
     display: flex;
@@ -175,8 +189,34 @@ li:hover {
     .mobile-view-container .visual-theme-container {
         display: flex;
     }
-    .mobile-view-container .cart {
+    .mobile-view-container .cart-mblvw {
         display: flex;
+        flex-direction: column;
+        width: 70px;
+        height: fit-content;
+    }
+    #cart-button-mblvw {
+        height: 40px;
+    }
+    .mobile-view-container .flechita {
+        position: relative;
+        top: 25px;
+        right: 9px;
+        border: 2px solid;
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(120deg, #f2dd6c, #ffcc4b);
+        transform: translate(50%, -50%) rotate(45deg);
+        display: none;
+    }
+    .mobile-view-container .cart-modal {
+        top: -34px;
+        right: 102px;
+        border: 2px solid;
+        position: relative;
+        display: none;
+        flex-direction: column;
+        height: fit-content;
     }
     .mobile-view-container .login-btn-container {
         display: flex;

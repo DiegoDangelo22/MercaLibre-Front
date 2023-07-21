@@ -1,0 +1,18 @@
+body {
+    width: 100vw;
+    height: 100vh;
+}
+div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: calc(100% - 130px);
+    gap: 10px;
+}
+h1 {
+    text-align: center;
+}
+p {
+    text-align: center;
+}

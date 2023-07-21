@@ -14,6 +14,8 @@ import { environment } from '../environments/environment';
 import { SearchResultsComponent } from './components/search-results/search-results.component';
 import { ProductDetailsComponent } from './components/product-details/product-details.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { CheckoutComponent } from './components/checkout/checkout.component';
+import { CheckoutSuccessComponent } from './components/checkout-success/checkout-success.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { FooterComponent } from './components/footer/footer.component';
     ContactComponent,
     SearchResultsComponent,
     ProductDetailsComponent,
-    FooterComponent
+    FooterComponent,
+    CheckoutComponent,
+    CheckoutSuccessComponent
   ],
   imports: [
     BrowserModule,

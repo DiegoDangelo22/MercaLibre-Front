@@ -55,12 +55,6 @@ export class RopaService {
   }
 
   public save(ropa: Ropa):Observable<any> {
-    // const httpOptions = {
-    //   headers: new HttpHeaders({
-    //     'Content-Type': 'application/json;charset=UTF-8'
-
-    //   })
-    // };
     return this.httpClient.post<any>(this.URL + 'create', ropa);
   }
 

@@ -20,10 +20,11 @@
                                 <div *ngFor="let product of cartProducts">
                                     <img [src]="product.img" width="50px">
                                     <p>{{product.nombre}}</p>
-                                    <p>Precio: {{product.precio}}</p>
+                                    <p class="precio">Precio: {{product.precio}}</p>
                                     <p class="cantidad">Cantidad: {{product.cantidad}}</p>
                                 </div>
                             </div>
+                            <button (click)="goToCheckout()">COMPRAR</button>
                         </div>
                     </div>
                     <div class="login-btn-container">
@@ -36,19 +37,20 @@
                             <button class="login-btn" id="bright-theme-btn-mblvw"><i class="fa-solid fa-sun"></i></button>
                             <button class="login-btn" id="dark-theme-btn-mblvw"><i class="fa-solid fa-moon"></i></button>
                         </div>
-                        <div class="cart">
-                            <button class="login-btn" id="cart-button"><i class="fa-solid fa-cart-shopping"></i></button>
+                        <div class="cart-mblvw">
+                            <button class="login-btn" id="cart-button-mblvw"><i class="fa-solid fa-cart-shopping"></i></button>
                             <div class="flechita"></div>
                             <div class="cart-modal">
                                 <h3>CARRITO</h3>
                                 <div class="cart-modal-product-list">
                                     <div *ngFor="let product of cartProducts">
-                                        <img [src]="product.img">
+                                        <img [src]="product.img" width="50px">
                                         <p>{{product.nombre}}</p>
-                                        <p>{{product.precio}}</p>
-                                        <p>{{product.cantidad}}</p>
+                                        <p class="precio">Precio: {{product.precio}}</p>
+                                        <p class="cantidad">Cantidad: {{product.cantidad}}</p>
                                     </div>
                                 </div>
+                                <button (click)="goToCheckout()">COMPRAR</button>
                             </div>
                         </div>
                         <div class="login-btn-container">

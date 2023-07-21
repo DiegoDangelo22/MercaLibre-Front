@@ -37,7 +37,11 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit {
   brightTheme!: boolean;
   darkTheme!: boolean;
   i: number = 0;
-  arrayFiltered:any[] = []
+  arrayPrecio: any[] = [];
+  arrayCantidad: any[] = [];
+  HTMLObjectPrecioFiltrado: any;
+  HTMLObjectCantidadFiltrado: any;
+  productRepetido:any;
 
   constructor(private ropaService: RopaService, private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder, public imageService: ImageService, private tokenServ: TokenService, private colorServ: ColorService, private talleServ: TalleService) {  }
 
@@ -90,79 +94,108 @@ addProductToCart() {
     const id = this.activatedRoute.snapshot.params['id'];
     this.ropaService.detail(id).subscribe(data => {
       this.cargarProducto();
-      if(localStorage.getItem('cart-products')) {
-        let productsStringified: any = localStorage.getItem('cart-products');
-        let products = JSON.parse(productsStringified);
-        let productRepetido = products.find((e: any)=> e.img === this.imagenPorDefecto.nombre);
-        if(productRepetido) {
-            
-            let cantidadText:any = document.querySelectorAll(".cantidad");
-            let array:any[] = [];
-              
-            while (this.i<1) {
-              cantidadText.forEach((e:any) => {
-                array.push(e);
-                this.arrayFiltered = array.filter((e:any)=>e.textContent == `Cantidad: ${productRepetido.cantidad}` && e.parentNode.childNodes[1].innerHTML == data.nombre);
-              });
-              this.i++;
-            }
-            if(this.imagenPorDefecto.stock <= productRepetido.cantidad) {
-              return;
-            } else {
-              productRepetido.cantidad += 1;
-              this.arrayFiltered[0].textContent = `Cantidad: ${productRepetido.cantidad}`;
-            }
-            localStorage.setItem('cart-products', JSON.stringify(products));
-          } else {
-            if(this.imagenPorDefecto.stock==0) {
-              alert("No hay stock de esa variante");
-            } else {
-              let cart = document.querySelector('.cart-modal-product-list');
-              let container = document.createElement('div');
-              let img = document.createElement('img');
-              let p1 = document.createElement('p');
-              let p2 = document.createElement('p');
-              let p3 = document.createElement('p');
-              p3.classList.add('cantidad');
-              img.src = this.imagenPorDefecto.nombre;
-              img.style.width = '50px';
-              p1.append(data.nombre);
-              p2.append(`Precio: ${data.precio.toString()}`);
-              p3.append('Cantidad: 1');
-              container.appendChild(img);
-              container.appendChild(p1);
-              container.appendChild(p2);
-              container.appendChild(p3);
-              cart?.appendChild(container);
-              products.push({id: data.id, nombre: data.nombre, precio: data.precio, img: this.imagenPorDefecto.nombre, cantidad: 1})
-              localStorage.setItem('cart-products', JSON.stringify(products));
-            }
-          }
+      if (localStorage.getItem('cart-products')) {
+        this.handleCartWithProducts(data);
       } else {
-        if(this.imagenPorDefecto.stock==0) {
-          alert("No hay stock de esa variante");
-        } else {
-          let cart = document.querySelector('.cart-modal-product-list');
-          let container = document.createElement('div');
-          let img = document.createElement('img');
-          let p1 = document.createElement('p');
-          let p2 = document.createElement('p');
-          let p3 = document.createElement('p');
-          p3.classList.add('cantidad');
-          img.src = this.imagenPorDefecto.nombre;
-          img.style.width = '50px';
-          p1.append(data.nombre);
-          p2.append(`Precio: ${data.precio.toString()}`);
-          p3.append('Cantidad: 1');
-          container.appendChild(img);
-          container.appendChild(p1);
-          container.appendChild(p2);
-          container.appendChild(p3);
-          cart?.appendChild(container);
-          localStorage.setItem('cart-products', JSON.stringify([{id: data.id, nombre: data.nombre, precio: data.precio, img: this.imagenPorDefecto.nombre, cantidad: 1}]));
-        }
+        this.handleCartWithoutProducts(data);
       }
     })
+}
+
+handleCartWithProducts(data: any) {
+    let productsStringified: any = localStorage.getItem('cart-products');
+    let products = JSON.parse(productsStringified);
+    this.productRepetido = products.find((e: any)=> e.img === this.imagenPorDefecto.nombre);
+            if(this.productRepetido) {
+              this.handleRepeatedProduct(this.productRepetido, products, data);
+            } else if(this.imagenPorDefecto.stock==0) {
+              alert("No hay stock de esa variante");
+            } else {
+              let cart = document.querySelectorAll('.cart-modal-product-list');
+              cart.forEach((e) => {
+                let container = document.createElement('div');
+                let img = document.createElement('img');
+                let p1 = document.createElement('p');
+                let p2 = document.createElement('p');
+                let p3 = document.createElement('p');
+                p2.classList.add('precio');
+                p3.classList.add('cantidad');
+                img.src = this.imagenPorDefecto.nombre;
+                img.style.width = '50px';
+                p1.append(data.nombre);
+                p2.append(`Precio: ${data.precio.toString()}`);
+                p3.append('Cantidad: 1');
+                container.appendChild(img);
+                container.appendChild(p1);
+                container.appendChild(p2);
+                container.appendChild(p3);
+                e.appendChild(container);
+              });
+              products.push({id: data.id, nombre: data.nombre, precio: data.precio, img: this.imagenPorDefecto.nombre, cantidad: 1, stock: this.imagenPorDefecto.stock})
+              localStorage.setItem('cart-products', JSON.stringify(products));
+          }
+  }
+
+handleRepeatedProduct(productRepetido:any, products:any, data:any) {
+              let precioText:any = document.querySelectorAll(".precio");
+              let cantidadText:any = document.querySelectorAll(".cantidad");
+              let HTMLObjectPrecio:any[] = [];
+              let HTMLObjectCantidad:any[] = [];
+              while(this.i<1) {
+              precioText.forEach((e:any) => {
+                this.arrayPrecio.push([e.textContent, e.parentNode.childNodes[1].innerHTML]);
+                HTMLObjectPrecio.push(e);
+              });
+              cantidadText.forEach((e:any) => {
+                this.arrayCantidad.push([e.textContent, e.parentNode.childNodes[1].innerHTML]);
+                HTMLObjectCantidad.push(e);
+              });
+              
+              this.HTMLObjectPrecioFiltrado = HTMLObjectPrecio.filter((e:any)=>e.textContent == `Precio: ${productRepetido.precio}` && e.parentNode.childNodes[1].innerHTML == data.nombre)
+              this.HTMLObjectCantidadFiltrado = HTMLObjectCantidad.filter((e:any)=>e.textContent == `Cantidad: ${productRepetido.cantidad}` && e.parentNode.childNodes[1].innerHTML == data.nombre)
+              this.i++
+              }
+              if(this.imagenPorDefecto.stock <= productRepetido.cantidad) {
+                return;
+              } else {
+                productRepetido.precio += data.precio;
+                productRepetido.cantidad += 1;
+                this.HTMLObjectPrecioFiltrado.forEach((e:any) => {
+                  e.textContent = `Precio: ${productRepetido.precio}`;
+                });
+                this.HTMLObjectCantidadFiltrado.forEach((e:any) => {
+                  e.textContent = `Cantidad: ${productRepetido.cantidad}`;
+                });
+              }
+            localStorage.setItem('cart-products', JSON.stringify(products));
+}
+
+handleCartWithoutProducts(data: any) {
+  if(this.imagenPorDefecto.stock==0) {
+    alert("No hay stock de esa variante");
+  } else {
+    let cart = document.querySelectorAll('.cart-modal-product-list');
+    cart.forEach((e)=> {
+      let container = document.createElement('div');
+      let img = document.createElement('img');
+      let p1 = document.createElement('p');
+      let p2 = document.createElement('p');
+      let p3 = document.createElement('p');
+      p2.classList.add('precio');
+      p3.classList.add('cantidad');
+      img.src = this.imagenPorDefecto.nombre;
+      img.style.width = '50px';
+      p1.append(data.nombre);
+      p2.append(`Precio: ${data.precio.toString()}`);
+      p3.append('Cantidad: 1');
+      container.appendChild(img);
+      container.appendChild(p1);
+      container.appendChild(p2);
+      container.appendChild(p3);
+      e.appendChild(container);
+    })
+    localStorage.setItem('cart-products', JSON.stringify([{id: data.id, nombre: data.nombre, precio: data.precio, img: this.imagenPorDefecto.nombre, cantidad: 1, stock: this.imagenPorDefecto.stock}]));
+  }
 }
 
 cargarProducto() {

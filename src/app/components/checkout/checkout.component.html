@@ -1,0 +1,16 @@
+<body>
+    <div class="payment-methods">
+        <h4>MEDIOS DE PAGO</h4>
+        <div class="paypal-container"></div>
+        <a routerLink="/products">Volver a la tienda</a>
+    </div>
+    <div class="purchase-details">
+        <h4>PRODUCTOS QUE VAS A COMPRAR</h4>
+        <div *ngFor="let products of this.header.cartProducts">
+            <img src="{{products.img}}" width="50px">
+            <p>{{products.nombre}}</p>
+            <p>Cantidad: {{products.cantidad}}</p>
+            <p>Precio: {{products.precio}}</p>
+        </div>
+    </div>
+</body>
